@@ -1,0 +1,597 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Karen Mathias Social Media</title>
+<meta name="description" content="Portfólio de Karen Mathias: social media, design e vídeos.">
+<meta name="theme-color" content="#07040d">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Karen Mathias · Portfólio">
+<meta property="og:description" content="Social media, design e vídeos.">
+<meta property="og:image" content="https://karenmathias.pivasolutions.com.br/img/glasses.jpg">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%2307040d'/%3E%3Ctext x='50' y='70' font-size='64' text-anchor='middle' fill='%23cdb2ff'%3E%E2%9C%A6%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT,WONK@9..144,400..900,0..100,0..1&family=Syncopate:wght@400;700&family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Plus+Jakarta+Sans:wght@500;600;700&display=swap">
+<style>
+/* Layout: o portfólio original da Karen (galáxia roxa, nota de papel, títulos retrô), na mesma ordem de seções, com efeitos: céu estrelado vivo, estrelas 3D com parallax, entradas ao rolar, contadores, antes/depois e zoom nas imagens */
+:root{
+  --space:#07040d;
+  --space-2:#120a22;
+  --nebula:#3a1670;
+  --violet:#8e5cff;
+  --lilac:#cdb2ff;
+  --rose:#ff86d6;
+  --white:#f7f3ff;
+  --muted:#b7abd0;
+  --paper:#fbf9ff;
+  --ink:#16101f;
+  --line:rgba(205,178,255,.18);
+  --grad:linear-gradient(95deg,#e7d6ff 0%,#b38cff 45%,#ff8fdc 100%);
+  --retro:"Fraunces",Georgia,serif;
+  --wide:"Syncopate","Arial Black",sans-serif;
+  --serif:"Lora",Georgia,"Times New Roman",serif;
+  --ui:"Plus Jakarta Sans",system-ui,sans-serif;
+  --wrap:1100px;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--space);color:var(--white);font-family:var(--serif);font-size:17px;line-height:1.65;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+img{max-width:100%;display:block}
+a{color:inherit}
+button{font:inherit;color:inherit}
+p{margin:0}
+.wrap{max-width:var(--wrap);margin-inline:auto;padding-inline:20px}
+:focus-visible{outline:2px solid var(--lilac);outline-offset:3px;border-radius:8px}
+
+/* céu */
+#sky{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+.nebula{position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(60% 45% at 80% 10%,rgba(122,60,220,.35),transparent 70%),radial-gradient(50% 40% at 10% 60%,rgba(90,30,180,.28),transparent 70%),radial-gradient(45% 35% at 70% 95%,rgba(150,70,230,.25),transparent 70%)}
+main,header,footer{position:relative;z-index:1}
+
+/* títulos */
+.retro{font-family:var(--retro);font-weight:800;font-variation-settings:"SOFT" 100,"WONK" 1,"opsz" 144;line-height:1;letter-spacing:-.01em;margin:0;text-wrap:balance}
+h2.retro{font-size:clamp(2.6rem,7vw,4.6rem)}
+.sub{font-family:var(--serif);font-style:italic;font-size:clamp(1.3rem,3vw,1.8rem);color:var(--lilac);margin-top:6px}
+.grad{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.lead{color:var(--muted);max-width:60ch}
+section{padding-block:clamp(70px,10vw,120px);position:relative;overflow:hidden;overflow:clip}
+.sparkle{display:inline-block;color:var(--lilac);animation:twinkle 2.6s ease-in-out infinite}
+@keyframes twinkle{0%,100%{transform:scale(1) rotate(0);opacity:1}50%{transform:scale(1.3) rotate(25deg);opacity:.7}}
+
+/* botões */
+.btn{display:inline-flex;align-items:center;gap:10px;padding:14px 26px;border-radius:999px;font:700 .95rem var(--ui);text-decoration:none;border:0;cursor:pointer;color:var(--ink);background:var(--grad);box-shadow:0 10px 30px -8px rgba(179,140,255,.7);transition:transform .2s,box-shadow .25s}
+.btn:hover{transform:translateY(-2px);box-shadow:0 16px 40px -8px rgba(179,140,255,.9)}
+.btn.ghost{background:rgba(255,255,255,.06);color:var(--white);border:1px solid var(--line);box-shadow:none}
+.btn.ghost:hover{border-color:var(--lilac)}
+.pulse{animation:glow 2.6s ease-in-out infinite}
+@keyframes glow{0%,100%{box-shadow:0 10px 30px -8px rgba(179,140,255,.6)}50%{box-shadow:0 10px 46px -2px rgba(255,143,220,.85)}}
+.btn .arrow{transition:transform .2s}
+.btn:hover .arrow{transform:translateX(4px)}
+
+/* progresso + nav */
+.progress{position:fixed;top:0;left:0;height:3px;width:0;z-index:60;background:var(--grad)}
+.nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:40;background:rgba(7,4,13,.7);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.nav .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-block:12px}
+.brand{font:700 .9rem var(--wide);letter-spacing:.12em;text-decoration:none;white-space:nowrap}
+.nav-links{display:flex;gap:26px;font:500 .9rem var(--ui)}
+.nav-links a{text-decoration:none;color:var(--muted);transition:color .2s}
+.nav-links a:hover{color:var(--white)}
+.nav .btn{padding:9px 18px;font-size:.85rem}
+@media (max-width:900px){.nav-links{display:none}}
+
+/* estrelas 3D com parallax */
+.star3d{position:absolute;z-index:0;pointer-events:none;width:var(--s,60px);height:var(--s,60px);will-change:transform}
+.star3d i{display:block;width:100%;height:100%;clip-path:polygon(50% 0,61% 39%,100% 50%,61% 61%,50% 100%,39% 61%,0 50%,39% 39%);background:radial-gradient(circle at 38% 32%,#fff 0%,#eadcff 14%,#b48bff 42%,#6a33d6 72%,#2b0f66 100%);animation:spin 8s ease-in-out infinite}
+.star3d::after{content:"";position:absolute;inset:-30%;background:radial-gradient(closest-side,rgba(190,150,255,.45),transparent);z-index:-1}
+.star3d.pink i{background:radial-gradient(circle at 38% 32%,#fff 0%,#ffe0f4 14%,#ff9be0 42%,#c93fa8 72%,#5a0f4f 100%)}
+@keyframes spin{0%,100%{transform:rotate(-12deg) scale(1)}50%{transform:rotate(12deg) scale(1.08)}}
+
+/* HERO: PORTFÓLIO */
+.hero{padding-top:clamp(40px,7vw,80px);text-align:center}
+.hero .wrap{position:relative;z-index:1;display:grid;justify-items:center;gap:20px}
+.word{font:400 clamp(2.4rem,10.5vw,8.2rem) var(--wide);letter-spacing:.06em;line-height:1;margin:0;color:var(--white);white-space:nowrap;text-shadow:0 0 40px rgba(179,140,255,.45)}
+.word span{display:inline-block;animation:drop .8s cubic-bezier(.2,1.2,.3,1) both}
+@keyframes drop{from{transform:translateY(-40px);opacity:0;filter:blur(8px)}to{transform:none;opacity:1;filter:none}}
+.hero-stage{position:relative;width:min(100%,760px);display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:24px;margin-top:-6px}
+.roles{display:grid;gap:4px;text-align:right;font:italic 500 clamp(1.1rem,2.6vw,1.6rem) var(--serif);color:var(--lilac)}
+.roles span{opacity:.95}
+.halo{position:relative;width:clamp(200px,34vw,320px);aspect-ratio:1}
+.halo::before{content:"";position:absolute;inset:-14px;border-radius:50%;background:conic-gradient(from 0deg,#b48bff,#ff8fdc,#6a33d6,#b48bff);animation:rot 8s linear infinite;filter:blur(1px)}
+.halo::after{content:"";position:absolute;inset:-40px;border-radius:50%;background:radial-gradient(closest-side,rgba(142,92,255,.5),transparent);z-index:-1}
+@keyframes rot{to{transform:rotate(360deg)}}
+.halo img{position:relative;width:100%;height:100%;object-fit:cover;border-radius:50%;border:6px solid var(--space)}
+.socials{display:grid;gap:8px;text-align:left;font:italic 1rem var(--serif)}
+.socials a,.socials span{display:flex;align-items:center;gap:8px;text-decoration:none;color:var(--white)}
+.socials a:hover{color:var(--lilac)}
+.socials i{font-style:normal;width:22px;height:22px;border-radius:6px;background:rgba(255,255,255,.12);display:grid;place-items:center;font:700 .62rem var(--ui)}
+.hero-ctas{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-top:10px}
+@media (max-width:700px){
+  .hero-stage{grid-template-columns:1fr;justify-items:center;gap:22px}
+  .roles{text-align:center;grid-auto-flow:column;gap:14px;font-size:1.1rem;order:2}
+  .halo{order:1}
+  .socials{order:3;text-align:center;justify-items:center}
+}
+
+/* SOBRE MIM: nota de papel */
+.about{display:grid;grid-template-columns:1.15fr .85fr;gap:48px;align-items:center}
+.about>*{min-width:0}
+.about h2{margin-bottom:28px}
+.note{position:relative;background:var(--paper);color:var(--ink);padding:34px 30px 30px;border-radius:4px;transform:rotate(-1.6deg);box-shadow:0 30px 60px -20px rgba(0,0,0,.7),12px 12px 0 rgba(142,92,255,.35);transition:transform .4s}
+.note:hover{transform:rotate(0)}
+.note::before{content:"";position:absolute;top:-16px;right:36px;width:22px;height:54px;border:3px solid #b9b3c6;border-radius:12px;border-bottom-color:transparent;transform:rotate(12deg)}
+.note .corner-star{position:absolute;right:-18px;bottom:-22px;font-size:2.6rem;color:var(--white);text-shadow:0 0 20px var(--violet);animation:twinkle 3s ease-in-out infinite}
+.note p{font-size:1.05rem;line-height:1.7}
+.note p+p{margin-top:12px}
+.note b{font-weight:600}
+.circle{position:relative;width:min(100%,340px);aspect-ratio:1;justify-self:center}
+.circle img{width:100%;height:100%;object-fit:cover;border-radius:50%;box-shadow:0 0 0 2px rgba(205,178,255,.4),0 0 60px rgba(142,92,255,.55)}
+@media (max-width:820px){.about{grid-template-columns:1fr}.circle{width:min(70%,280px)}}
+
+/* CERTIFICADOS */
+.cert{display:grid;grid-template-columns:.8fr 1.2fr;gap:44px;align-items:center}
+.cert>*{min-width:0}
+.cert-photo{border-radius:22px;overflow:hidden;box-shadow:0 30px 60px -20px rgba(0,0,0,.7);max-width:380px}
+.cert-photo img{aspect-ratio:4/5;width:100%;object-fit:cover;object-position:50% 70%}
+.cert-copy{display:grid;gap:22px}
+.cert-copy h2 .sparkle{font-size:.6em;vertical-align:top}
+.zoom{position:relative;display:block;border:0;padding:0;background:none;cursor:zoom-in;border-radius:16px;overflow:hidden}
+.zoom img{width:100%;transition:transform .5s}
+.zoom:hover img{transform:scale(1.04)}
+.zoom::after{content:"⤢ ampliar";position:absolute;right:10px;bottom:10px;font:600 .72rem var(--ui);padding:4px 10px;border-radius:999px;background:rgba(7,4,13,.75);color:var(--white);opacity:0;transition:opacity .25s}
+.zoom:hover::after{opacity:1}
+@media (max-width:820px){.cert{grid-template-columns:1fr}.cert-photo{width:min(80%,340px);margin-inline:auto}}
+
+/* SKILLS */
+.skills-head{display:flex;justify-content:center;margin-bottom:44px}
+.skills{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+.group{background:rgba(18,10,34,.7);border:1px solid var(--line);border-radius:22px;padding:24px;display:grid;gap:14px;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.group h3{margin:0;font:italic 500 1.35rem var(--serif);color:var(--lilac)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chips span{font:600 .85rem var(--ui);padding:8px 14px;border-radius:12px;background:rgba(255,255,255,.06);border:1px solid var(--line);transition:transform .2s,background .2s,border-color .2s,box-shadow .2s}
+.chips span:hover{transform:translateY(-3px);background:rgba(142,92,255,.25);border-color:var(--lilac);box-shadow:0 10px 24px -10px rgba(142,92,255,.8)}
+.special{grid-column:1/-1;display:grid;grid-template-columns:auto 1fr;gap:20px;align-items:center}
+.special ul{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:8px 22px}
+.special li{font:italic 1.05rem var(--serif)}
+.special li::before{content:"✦ ";color:var(--lilac)}
+@media (max-width:760px){.skills{grid-template-columns:1fr}.special{grid-template-columns:1fr}}
+
+/* PRIMEIRO TRABALHO */
+.first{display:grid;grid-template-columns:1fr 1fr;gap:52px;align-items:center}
+.first>*{min-width:0}
+.first-copy{display:grid;gap:20px}
+.client-tag{font:600 .8rem var(--ui);letter-spacing:.12em;text-transform:uppercase;color:var(--lilac)}
+.counter{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.counter div{display:grid}
+.counter b{font:800 clamp(2.4rem,6vw,3.6rem)/1 var(--retro);font-variation-settings:"SOFT" 100,"WONK" 1;font-variant-numeric:tabular-nums}
+.counter small{font:500 .82rem var(--ui);color:var(--muted)}
+.counter .to{font-size:2rem;color:var(--lilac)}
+.compare-wrap{display:grid;gap:12px}
+.compare{position:relative;aspect-ratio:265/380;width:100%;max-width:400px;margin-inline:auto;border-radius:18px;overflow:hidden;background:#000;border:1px solid var(--line);box-shadow:0 40px 80px -30px rgba(142,92,255,.7);touch-action:pan-y}
+.compare img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.compare .after{clip-path:inset(0 0 0 var(--pos,50%))}
+.compare .handle{position:absolute;top:0;bottom:0;left:var(--pos,50%);width:2px;background:#fff;transform:translateX(-50%);pointer-events:none}
+.compare .handle::after{content:"⟷";position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:50px;height:50px;border-radius:50%;background:var(--grad);color:var(--ink);display:grid;place-items:center;font-weight:800;box-shadow:0 0 0 8px rgba(179,140,255,.22),0 10px 30px rgba(142,92,255,.7)}
+.compare .tag{position:absolute;top:12px;padding:4px 11px;border-radius:999px;font:700 .72rem var(--ui);background:rgba(7,4,13,.8);color:#fff;pointer-events:none}
+.compare .tag.l{left:12px}
+.compare .tag.r{right:12px;background:var(--lilac);color:var(--ink)}
+.compare input{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:ew-resize;margin:0}
+.hint{text-align:center;font:500 .8rem var(--ui);color:var(--muted)}
+@media (max-width:860px){.first{grid-template-columns:1fr}}
+
+/* TIPOGRAFIA */
+.type-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:22px;align-items:start;margin-top:36px}
+.type-grid>*{min-width:0}
+.type-side{display:grid;gap:22px}
+.type-block{display:grid;gap:10px}
+.type-block .sub{margin:0}
+.type-block p{color:var(--muted);font-size:.98rem}
+.sample{font-family:"Fraunces",serif;font-size:1.5rem}
+@media (max-width:820px){.type-grid{grid-template-columns:1fr}}
+
+/* CORES */
+.colors{display:flex;flex-wrap:wrap;justify-content:center;gap:16px;margin-top:40px}
+.dot{width:clamp(150px,19vw,190px);aspect-ratio:1;border-radius:50%;display:grid;place-content:center;text-align:center;padding:20px;color:#fff;box-shadow:inset 0 -10px 30px rgba(0,0,0,.25),0 20px 40px -14px rgba(0,0,0,.7);transition:transform .35s cubic-bezier(.2,1.4,.4,1);cursor:default}
+.dot:hover{transform:scale(1.08) rotate(-3deg)}
+.dot b{font:600 .95rem var(--ui);text-decoration:underline;text-underline-offset:3px}
+.dot span{font-size:.8rem;line-height:1.35;margin-top:6px}
+.dot.gold{color:#2a1a00}
+.colors.in .dot{animation:pop .6s cubic-bezier(.2,1.4,.4,1) both}
+.colors.in .dot:nth-child(2){animation-delay:.1s}.colors.in .dot:nth-child(3){animation-delay:.2s}.colors.in .dot:nth-child(4){animation-delay:.3s}.colors.in .dot:nth-child(5){animation-delay:.4s}
+@keyframes pop{from{transform:scale(.6);opacity:.1}to{transform:none;opacity:1}}
+
+/* LOGO E IMAGENS + INSTAGRAM */
+.duo{display:grid;grid-template-columns:.75fr 1.25fr;gap:22px;margin-top:36px;align-items:start}
+.duo>*{min-width:0}
+.stack{display:grid;gap:22px}
+.caption{font:italic .95rem var(--serif);color:var(--muted);margin-top:8px}
+@media (max-width:820px){.duo{grid-template-columns:1fr}}
+
+/* CASES */
+.case{display:grid;grid-template-columns:auto 1fr;gap:12px 28px;align-items:start;margin-top:64px}
+.case:first-of-type{margin-top:0}
+.case .num{font:800 clamp(2.6rem,6vw,3.8rem)/1 var(--retro);font-variation-settings:"SOFT" 100,"WONK" 1;white-space:nowrap}
+.case-info{display:grid;gap:8px;padding-top:6px}
+.case-info h3{margin:0;font:600 1.25rem var(--serif)}
+.case-info h3 span{color:var(--lilac);font-weight:400}
+.case-info ul{margin:0;padding-left:20px;display:grid;gap:3px;color:var(--muted)}
+.case-info li::marker{color:var(--lilac)}
+.case .zoom{grid-column:1/-1;border:1px solid var(--line);box-shadow:0 30px 60px -24px rgba(0,0,0,.7)}
+@media (max-width:640px){.case{grid-template-columns:1fr}}
+
+/* OBRIGADA */
+.thanks{text-align:center;padding-block:clamp(90px,14vw,170px)}
+.thanks .wrap{display:grid;justify-items:center;gap:22px;position:relative;z-index:1}
+.thanks h2{font-size:clamp(3.4rem,12vw,8rem)}
+.thanks h2 span{display:block}
+.contacts{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+.contact{display:inline-flex;align-items:center;gap:8px;padding:10px 16px;border-radius:999px;background:rgba(255,255,255,.07);border:1px solid var(--line);text-decoration:none;font:600 .88rem var(--ui);transition:border-color .2s,background .2s}
+a.contact:hover{border-color:var(--lilac);background:rgba(142,92,255,.2)}
+.contact button{background:none;border:0;color:var(--lilac);font:700 .8rem var(--ui);cursor:pointer;text-decoration:underline;padding:0}
+
+footer{padding-block:28px 120px;border-top:1px solid var(--line);font:500 .82rem var(--ui);color:var(--muted)}
+footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px}
+
+/* lightbox */
+.lb{position:fixed;inset:0;z-index:90;background:rgba(5,2,10,.88);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);display:grid;place-items:center;padding:24px;opacity:0;visibility:hidden;transition:opacity .25s,visibility .25s;cursor:zoom-out}
+.lb.on{opacity:1;visibility:visible}
+.lb img{max-height:86vh;max-width:min(1000px,100%);border-radius:14px;box-shadow:0 30px 80px rgba(0,0,0,.8);transform:scale(.94);transition:transform .3s}
+.lb.on img{transform:none}
+.lb button{position:absolute;top:calc(16px + env(safe-area-inset-top,0px));right:16px;width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:rgba(255,255,255,.08);color:#fff;font-size:1.3rem;cursor:pointer}
+
+.toast{position:fixed;left:50%;bottom:calc(96px + env(safe-area-inset-bottom,0px));transform:translate(-50%,16px);opacity:0;background:var(--white);color:var(--ink);border-radius:999px;padding:10px 18px;font:700 .9rem var(--ui);box-shadow:0 14px 30px rgba(0,0,0,.5);z-index:95;transition:opacity .25s,transform .25s;pointer-events:none}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+
+.sticky-cta{position:fixed;left:50%;transform:translate(-50%,calc(100% + 40px));opacity:0;visibility:hidden;bottom:calc(12px + env(safe-area-inset-bottom,0px));width:min(480px,calc(100% - 24px));z-index:50;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:8px 8px 8px 18px;background:rgba(18,10,34,.92);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid var(--line);border-radius:999px;box-shadow:0 18px 40px rgba(0,0,0,.6);transition:transform .45s cubic-bezier(.2,1,.3,1),opacity .3s,visibility .3s}
+.sticky-cta.on{transform:translate(-50%,0);opacity:1;visibility:visible}
+.sticky-cta p{font:500 .8rem/1.25 var(--ui);color:var(--muted)}
+.sticky-cta p b{color:var(--white);display:block;font-size:.88rem}
+.sticky-cta .btn{padding:10px 18px;font-size:.85rem;white-space:nowrap}
+
+.reveal.in{animation:rise .8s cubic-bezier(.2,.8,.2,1) both}
+.stagger.in>*{animation:rise .6s cubic-bezier(.2,.8,.2,1) both}
+.stagger.in>*:nth-child(2){animation-delay:.1s}.stagger.in>*:nth-child(3){animation-delay:.2s}.stagger.in>*:nth-child(4){animation-delay:.3s}.stagger.in>*:nth-child(5){animation-delay:.4s}
+@keyframes rise{from{transform:translateY(26px);opacity:.12}to{transform:none;opacity:1}}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+
+<canvas id="sky" aria-hidden="true"></canvas>
+<div class="nebula" aria-hidden="true"></div>
+<div class="progress" id="progress" aria-hidden="true"></div>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="#topo">KAREN MATHIAS</a>
+    <nav class="nav-links" aria-label="Seções">
+      <a href="#sobre">Sobre mim</a>
+      <a href="#skills">Skills</a>
+      <a href="#mutti">Mutti</a>
+      <a href="#cases">Cases</a>
+    </nav>
+    <a class="btn" href="#contato">Fale comigo</a>
+  </div>
+</header>
+
+<main id="topo">
+  <!-- PORTFÓLIO -->
+  <section class="hero">
+    <span class="star3d" data-speed="-0.15" style="--s:70px;left:6%;top:90px"><i></i></span>
+    <span class="star3d pink" data-speed="0.2" style="--s:42px;right:8%;top:60px"><i></i></span>
+    <span class="star3d" data-speed="0.25" style="--s:54px;right:12%;bottom:40px"><i></i></span>
+    <div class="wrap">
+      <h1 class="word" aria-label="Portfólio" id="word">PORTFÓLIO</h1>
+      <div class="hero-stage">
+        <div class="roles"><span>Social media</span><span>Design</span><span>Vídeos</span></div>
+        <div class="halo"><img src="img/glasses.jpg" alt="Karen Mathias"></div>
+        <div class="socials">
+          <a href="https://instagram.com/klika.studio" target="_blank" rel="noopener"><i>IG</i>@klika.studio</a>
+          <a href="https://www.behance.net/karenmathias_sm" target="_blank" rel="noopener"><i>Bē</i>BE_karenmathias_sm</a>
+          <span><i>@</i>kmsocialmedia.co@gmail.com</span>
+        </div>
+      </div>
+      <div class="hero-ctas">
+        <a class="btn pulse" href="#contato">Fale comigo <span class="arrow">→</span></a>
+        <a class="btn ghost" href="#mutti">Ver meus trabalhos ↓</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- SOBRE MIM -->
+  <section id="sobre">
+    <div class="wrap about">
+      <div class="reveal">
+        <h2 class="retro">Sobre mim</h2>
+        <div class="note">
+          <p><b>Olá, sou a Karen Mathias!</b></p>
+          <p>Há 4 anos, transformo redes sociais em canais estratégicos para marcas que querem crescer, se posicionar e criar conexão com seu público.</p>
+          <p>Meu trabalho combina estratégia de conteúdo, criatividade e análise de dados para criar conteúdos com propósito claro, autenticidade e que gere impacto positivo para a marca.</p>
+          <span class="corner-star" aria-hidden="true">✦</span>
+        </div>
+      </div>
+      <div class="circle reveal"><img src="img/glasses.jpg" alt="Karen Mathias de óculos"></div>
+    </div>
+  </section>
+
+  <!-- CERTIFICADOS -->
+  <section>
+    <span class="star3d pink" data-speed="-0.12" style="--s:46px;right:6%;top:60px"><i></i></span>
+    <div class="wrap cert">
+      <div class="cert-photo reveal"><img src="img/portrait.jpg" alt="Karen Mathias sorrindo"></div>
+      <div class="cert-copy reveal">
+        <h2 class="retro">Certificados <span class="sparkle">✦</span></h2>
+        <p class="lead">Sou formada em Administração, Marketing Digital e Vendas, tenho também certificações na área de Social Media. Estou sempre ampliando meu olhar sobre os conteúdos nas redes sociais e me permitindo enxergá-las além da criação e estratégia de conteúdo.</p>
+        <button class="zoom" data-src="img/certificados.jpg" aria-label="Ampliar certificados"><img src="img/certificados.jpg" alt="Certificados da Universidade Paulista, Anhembi Morumbi, UniAmérica e Social Media na Prática"></button>
+      </div>
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section id="skills">
+    <span class="star3d" data-speed="0.18" style="--s:60px;left:4%;bottom:60px"><i></i></span>
+    <div class="wrap">
+      <div class="skills-head"><h2 class="retro">Skills</h2></div>
+      <div class="skills stagger">
+        <div class="group"><h3>Redes sociais</h3><div class="chips"><span>Instagram</span><span>TikTok</span><span>Facebook</span><span>Pinterest</span><span>LinkedIn</span><span>X</span></div></div>
+        <div class="group"><h3>Edição</h3><div class="chips"><span>CapCut</span><span>Photoroom</span><span>Lightroom</span></div></div>
+        <div class="group"><h3>Criação e design</h3><div class="chips"><span>Canva</span><span>Procreate</span></div></div>
+        <div class="group"><h3>IA</h3><div class="chips"><span>ChatGPT</span><span>Claude</span><span>Gemini</span></div></div>
+        <div class="group special"><h3>Especialidades</h3><ul><li>Mídia social</li><li>Marketing de conteúdo</li><li>Copywriting</li><li>Edição e criação de vídeos</li><li>Posicionamento de marca</li></ul></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MEU PRIMEIRO TRABALHO -->
+  <section id="mutti">
+    <div class="wrap first">
+      <div class="first-copy reveal">
+        <span class="client-tag">Mutti Pomodoro · Foodservice</span>
+        <h2 class="retro">Meu primeiro trabalho como Social Media</h2>
+        <div class="counter" id="counter">
+          <div><b data-count="36">36</b><small>seguidores empresariais</small></div>
+          <span class="to">→</span>
+          <div><b class="grad" data-count="1264">1.264</b><small>em 4 meses</small></div>
+        </div>
+        <p class="lead">Em 4 meses, atingimos nossos objetivos de aumentar as contas profissionais alcançadas e fechamos parceria com um dos maiores influenciadores de pizza napolitana no Brasil. Começamos com 36 seguidores empresariais e chegamos em 1.264, um crescimento impressionante para uma empresa B2B do setor de Foodservice.</p>
+      </div>
+      <div class="compare-wrap reveal">
+        <div class="compare" id="compare">
+          <img src="img/mutti_antes.jpg" alt="Perfil da Mutti antes, com 36 seguidores">
+          <img class="after" src="img/mutti_depois.jpg" alt="Perfil da Mutti depois, com 1.264 seguidores">
+          <span class="tag l">Antes</span><span class="tag r">Depois</span>
+          <div class="handle"></div>
+          <input type="range" id="compare-range" min="0" max="100" value="50" aria-label="Comparar antes e depois">
+        </div>
+        <p class="hint">⟷ arraste para comparar</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- TIPOGRAFIA -->
+  <section>
+    <span class="star3d pink" data-speed="0.15" style="--s:40px;left:7%;top:80px"><i></i></span>
+    <div class="wrap">
+      <div class="reveal">
+        <h2 class="retro">Tipografia</h2>
+        <p class="sub">Cursiva</p>
+        <p class="lead" style="margin-top:14px">A Mutti disponibilizou seu padrão de tipografia para ser seguido em todos os materiais de comunicação.</p>
+      </div>
+      <div class="type-grid">
+        <button class="zoom reveal" data-src="img/tipo_cursiva.jpg" aria-label="Ampliar tipografia cursiva"><img src="img/tipo_cursiva.jpg" alt="Folha da fonte cursiva Kitten Swash Monoline"></button>
+        <div class="type-side">
+          <div class="type-block reveal">
+            <button class="zoom" data-src="img/tipo_cursiva_app.jpg" aria-label="Ampliar aplicação da cursiva"><img src="img/tipo_cursiva_app.jpg" alt="Fonte cursiva aplicada nas embalagens Mutti"></button>
+          </div>
+          <div class="type-block reveal">
+            <p class="sub">Sans Serifa</p>
+            <p>A empresa exigia que esse padrão fosse respeitado, garantindo uniformidade e coerência em todas as representações visuais da marca.</p>
+            <button class="zoom" data-src="img/tipo_sans.jpg" aria-label="Ampliar tipografia sans serifa"><img src="img/tipo_sans.jpg" alt="Folha da fonte Rhode Bold Condensed"></button>
+            <button class="zoom" data-src="img/tipo_sans_app.jpg" aria-label="Ampliar aplicação da sans serifa"><img src="img/tipo_sans_app.jpg" alt="Fonte sans serifa aplicada em post da Mutti"></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CORES E CONTRASTE -->
+  <section>
+    <div class="wrap" style="text-align:center">
+      <h2 class="retro reveal">Cores e Contraste</h2>
+      <p class="lead reveal" style="margin:16px auto 0">Inspirado nas personalidades dos produtos Mutti, além da tipografia, era importante seguir o modelo de cores.</p>
+      <div class="colors" id="colors">
+        <div class="dot" style="background:#e3262e"><b>Vermelho Intenso</b><span>Simboliza urgência e chama a atenção com impacto</span></div>
+        <div class="dot" style="background:#b1232b"><b>Vermelho Clássico</b><span>Continuidade para os formatos antigos, em linhas escritas com fundo claro</span></div>
+        <div class="dot gold" style="background:#d8a21f"><b>Dourado Vibrante</b><span>Destaques que dão energia, entusiasmo e calor</span></div>
+        <div class="dot" style="background:#8f1b25"><b>Vermelho em Negrito</b><span>Destaca linhas e pequenos elementos gráficos</span></div>
+        <div class="dot" style="background:#f86c51"><b>Vermelho Alegre</b><span>Enfatiza pacotes, ilustrações e animações</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LOGO E IMAGENS + INSTAGRAM -->
+  <section>
+    <span class="star3d" data-speed="-0.18" style="--s:56px;right:5%;top:100px"><i></i></span>
+    <div class="wrap">
+      <div class="reveal">
+        <h2 class="retro">Logo e Imagens</h2>
+        <p class="sub">Criativos</p>
+        <p class="lead" style="margin-top:14px">A empresa também forneceu a Logo para personalização e as imagens em png para os criativos.</p>
+      </div>
+      <div class="duo">
+        <button class="zoom reveal" data-src="img/mutti_polpa.jpg" aria-label="Ampliar criativo Mutti Polpa"><img src="img/mutti_polpa.jpg" alt="Criativo Mutti Polpa, tomates finamente picados"></button>
+        <div class="stack">
+          <div class="reveal">
+            <button class="zoom" data-src="img/mutti_produtos.jpg" aria-label="Ampliar logo e produtos"><img src="img/mutti_produtos.jpg" alt="Logo Mutti original e versão Professional com produtos"></button>
+            <p class="caption">Original → Foodservice Professional</p>
+          </div>
+          <div class="reveal">
+            <h2 class="retro" style="font-size:clamp(2.2rem,5vw,3.2rem)">Instagram</h2>
+            <p class="sub">Posts</p>
+            <p class="lead" style="margin-block:12px 16px">Todos os posts seguiram os padrões de cores e tipografia da marca, refletindo sua personalidade. Cada elemento foi escolhido para garantir uma comunicação coesa, profissional e uma presença digital consistente e marcante.</p>
+            <button class="zoom" data-src="img/mutti_feed.jpg" aria-label="Ampliar feed do Instagram"><img src="img/mutti_feed.jpg" alt="Feed do Instagram da Mutti Professional"></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CASES -->
+  <section id="cases">
+    <span class="star3d pink" data-speed="0.2" style="--s:50px;left:5%;top:40%"><i></i></span>
+    <div class="wrap">
+      <article class="case reveal">
+        <span class="num">Case 1</span>
+        <div class="case-info"><h3>Mayara Witt Said <span>| Projetos</span></h3>
+          <ul><li>Construção e posicionamento da marca</li><li>Estratégia e planejamento de conteúdo</li><li>Identidade visual e direção criativa</li><li>Criação de conteúdos autorais</li><li>Roteiros, gravação e edição de vídeos</li><li>Desenvolvimento de projetos e pré-lançamentos</li><li>Captação de conteúdos presencialmente para pré-lançamento</li><li>Foco em autoridade, conexão e posicionamento digital</li></ul></div>
+        <button class="zoom" data-src="img/case1_reels.jpg" aria-label="Ampliar vídeos do case 1"><img src="img/case1_reels.jpg" alt="Vídeos gravados e editados para Mayara Witt Said"></button>
+        <button class="zoom" data-src="img/case1_posts.jpg" aria-label="Ampliar posts do case 1"><img src="img/case1_posts.jpg" alt="Posts em tons de laranja sobre a NR-1"></button>
+      </article>
+      <article class="case reveal">
+        <span class="num">Case 2</span>
+        <div class="case-info"><h3>Graziele <span>| Psicóloga</span></h3>
+          <ul><li>Reestruturação e reativação do perfil</li><li>Posicionamento e estratégia de comunicação</li><li>Desenvolvimento de identidade visual</li><li>Criação de conteúdo autoral alinhado à atuação profissional</li></ul></div>
+        <button class="zoom" data-src="img/case2.jpg" aria-label="Ampliar case 2"><img src="img/case2.jpg" alt="Capa do projeto de social media da psicóloga Graziele"></button>
+      </article>
+      <article class="case reveal">
+        <span class="num">Case 3</span>
+        <div class="case-info"><h3>Luísa <span>| Psicóloga</span></h3>
+          <ul><li>Profissionalização e reestruturação do perfil</li><li>Identidade visual própria</li><li>Planejamento editorial</li><li>Conteúdo autoral estratégico</li><li>Roteiros e edição de vídeos</li><li>Foco em alcance, autoridade e engajamento</li></ul></div>
+        <button class="zoom" data-src="img/case3.jpg" aria-label="Ampliar case 3"><img src="img/case3.jpg" alt="Posts sobre saúde mental para a psicóloga Luísa"></button>
+      </article>
+    </div>
+  </section>
+
+  <!-- MUITO OBRIGADA -->
+  <section class="thanks" id="contato">
+    <span class="star3d" data-speed="-0.2" style="--s:80px;left:8%;top:60px"><i></i></span>
+    <span class="star3d pink" data-speed="0.22" style="--s:48px;right:10%;bottom:80px"><i></i></span>
+    <div class="wrap">
+      <h2 class="retro reveal"><span>Muito</span><span class="grad">Obrigada!</span></h2>
+      <p class="lead reveal">Vamos fazer sua marca crescer com estratégia? Me chama e eu te conto como posso ajudar.</p>
+      <a class="btn pulse" href="https://ig.me/m/klika.studio" target="_blank" rel="noopener">Chamar no Instagram <span class="arrow">→</span></a>
+      <div class="contacts">
+        <a class="contact" href="https://instagram.com/klika.studio" target="_blank" rel="noopener">@klika.studio</a>
+        <a class="contact" href="https://www.behance.net/karenmathias_sm" target="_blank" rel="noopener">Behance</a>
+        <span class="contact"><span id="email">kmsocialmedia.co@gmail.com</span><button id="copy-email" type="button">copiar</button></span>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap"><span>© 2026 Karen Mathias</span><span>Social media · Design · Vídeos · Site por <a href="https://www.instagram.com/pivasolutionss" target="_blank" rel="noopener">PIVA Solutions</a></span></div>
+</footer>
+
+<div class="sticky-cta" id="sticky">
+  <p><b>Karen Mathias</b>Social media · Design · Vídeos</p>
+  <a class="btn" href="#contato">Fale comigo →</a>
+</div>
+<div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="Imagem ampliada"><button type="button" aria-label="Fechar">×</button><img alt=""></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(function(){
+  var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var $ = function(s,c){return (c||document).querySelector(s)};
+  var $$ = function(s,c){return Array.prototype.slice.call((c||document).querySelectorAll(s))};
+
+  // PORTFÓLIO letra por letra
+  var word = $('#word'), txt = word.textContent; word.textContent = '';
+  txt.split('').forEach(function(ch,i){ var s = document.createElement('span'); s.textContent = ch; s.setAttribute('aria-hidden','true'); s.style.animationDelay = (i*0.07) + 's'; word.appendChild(s); });
+
+  // céu estrelado
+  var cv = $('#sky'), ctx = cv.getContext('2d'), stars = [], W, H, dpr = Math.min(devicePixelRatio || 1, 2);
+  function size(){
+    W = innerWidth; H = innerHeight; cv.width = W*dpr; cv.height = H*dpr; ctx.setTransform(dpr,0,0,dpr,0,0);
+    var n = Math.round(W*H/5200); stars = [];
+    for (var i=0;i<n;i++) stars.push({x:Math.random()*W, y:Math.random()*H, r:Math.random()*1.3+.2, p:Math.random()*Math.PI*2, s:Math.random()*.02+.005, d:Math.random()*.4+.1, c:Math.random()<.18});
+  }
+  var scrollY0 = 0;
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    for (var i=0;i<stars.length;i++){
+      var st = stars[i]; st.p += st.s;
+      var a = .35 + Math.sin(st.p)*.35 + .3;
+      var y = (st.y - scrollY0*st.d) % H; if (y < 0) y += H;
+      ctx.globalAlpha = Math.max(0, Math.min(1, a));
+      ctx.fillStyle = st.c ? '#cdb2ff' : '#ffffff';
+      ctx.beginPath(); ctx.arc(st.x, y, st.r, 0, 6.283); ctx.fill();
+    }
+    ctx.globalAlpha = 1;
+    if (!reduce) requestAnimationFrame(draw);
+  }
+  size(); addEventListener('resize', size); draw();
+
+  // progresso, barra fixa e parallax
+  var bar = $('#progress'), sticky = $('#sticky'), floaters = $$('[data-speed]'), contato = $('#contato'), ticking = false;
+  function frame(){
+    ticking = false;
+    var h = document.documentElement, y = h.scrollTop, max = h.scrollHeight - h.clientHeight;
+    scrollY0 = y;
+    bar.style.width = (max > 0 ? y/max*100 : 0) + '%';
+    var r = contato.getBoundingClientRect();
+    sticky.classList.toggle('on', y > 700 && !(r.top < innerHeight && r.bottom > 0));
+    if (!reduce) floaters.forEach(function(f){ var t = f.parentElement.getBoundingClientRect().top; f.style.transform = 'translateY(' + (t * +f.getAttribute('data-speed')).toFixed(1) + 'px)'; });
+    if (reduce) draw();
+  }
+  addEventListener('scroll', function(){ if (!ticking){ ticking = true; requestAnimationFrame(frame); } }, {passive:true});
+  frame();
+
+  // entradas e contadores
+  function countUp(el){
+    if (reduce) return;
+    var target = +el.getAttribute('data-count'), t0 = null;
+    function step(t){ if(!t0) t0 = t; var p = Math.min((t-t0)/1600,1), e = 1 - Math.pow(1-p,3); el.textContent = Math.round(target*e).toLocaleString('pt-BR'); if(p<1) requestAnimationFrame(step); }
+    requestAnimationFrame(step);
+  }
+  if ('IntersectionObserver' in window){
+    var io = new IntersectionObserver(function(es){
+      es.forEach(function(en){
+        if (!en.isIntersecting) return;
+        var el = en.target;
+        if (el.hasAttribute('data-count')) countUp(el); else el.classList.add('in');
+        io.unobserve(el);
+      });
+    }, {threshold:.18});
+    $$('[data-count],.reveal,.stagger,#colors').forEach(function(el){ io.observe(el) });
+  }
+
+  // antes e depois
+  var cmp = $('#compare'), range = $('#compare-range');
+  function setPos(v){ cmp.style.setProperty('--pos', v + '%'); }
+  range.addEventListener('input', function(){ setPos(range.value) });
+  setPos(50);
+  if (!reduce && 'IntersectionObserver' in window){
+    var cio = new IntersectionObserver(function(en){
+      if (!en[0].isIntersecting) return; cio.disconnect();
+      var t0 = null;
+      function wig(t){ if(!t0) t0 = t; var p = (t-t0)/1600; if (p>1){ range.value = 50; setPos(50); return; } var v = 50 + Math.sin(p*Math.PI*2)*28*(1-p); range.value = v; setPos(v); requestAnimationFrame(wig); }
+      requestAnimationFrame(wig);
+    }, {threshold:.5});
+    cio.observe(cmp);
+  }
+
+  // zoom nas imagens
+  var lb = $('#lb'), lbImg = $('img', lb);
+  $$('.zoom').forEach(function(z){ z.addEventListener('click', function(){ lbImg.src = z.getAttribute('data-src'); lbImg.alt = $('img', z).alt; lb.classList.add('on'); }); });
+  function closeLb(){ lb.classList.remove('on'); }
+  lb.addEventListener('click', closeLb);
+  addEventListener('keydown', function(e){ if (e.key === 'Escape') closeLb(); });
+
+  // copiar e-mail
+  var toastEl = $('#toast'), tt;
+  function toast(m){ toastEl.textContent = m; toastEl.classList.add('on'); clearTimeout(tt); tt = setTimeout(function(){ toastEl.classList.remove('on') }, 2200); }
+  $('#copy-email').addEventListener('click', function(){
+    var el = $('#email'), text = el.textContent;
+    function fb(){ var r = document.createRange(); r.selectNodeContents(el); var s = getSelection(); s.removeAllRanges(); s.addRange(r); toast('E-mail selecionado, é só copiar'); }
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(function(){ toast('E-mail copiado ✦') }, fb); else fb();
+  });
+})();
+</script>
+
+</body>
+</html>
