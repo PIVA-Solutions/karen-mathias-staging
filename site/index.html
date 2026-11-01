@@ -670,21 +670,45 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px}
   function all(){ return Array.prototype.slice.call(stage.querySelectorAll('video.phone-vid')); }
   function pauseAll(keep){ all().forEach(function(o){ if (o !== keep && !o.paused) o.pause(); }); }
   function start(v){
-    if (!v || !v.isConnected || !loaded || !onScreen || document.hidden) return;
+    if (!v || !v.isConnected || v._waiting || !loaded || !onScreen || document.hidden) return;
     pauseAll(v); // nunca mais de um tocando
     var p = v.play();
     if (p && p.catch) p.catch(function(e){ dbg.err = 'play(): ' + ((e && (e.name + ' ' + e.message)) || e); }); // fica o pôster
   }
   function drop(v){ dbg.err = 'error: ' + ((v.error && ('code ' + v.error.code)) || 'source'); if (current === v) current = null; if (v.parentNode) v.parentNode.removeChild(v); } // fallback: fica a imagem
 
+  // Espera o fim do movimento do slide (transitionend do transform) ou 900 ms, o que vier primeiro
+  function afterMove(el, cb){
+    var done = false, t;
+    function fin(e){
+      if (e && (e.target !== el || e.propertyName !== 'transform')) return;
+      if (done) return; done = true; el.removeEventListener('transitionend', fin); clearTimeout(t); cb();
+    }
+    el.addEventListener('transitionend', fin); t = setTimeout(fin, 900);
+  }
+  stage.addEventListener('transitionend', function(e){
+    if (e.propertyName === 'transform' && e.target.classList && e.target.classList.contains('phone-slide')) dbg.te = Math.round(performance.now());
+  });
+
   // Chamado pelo layout() do carrossel para cada slide com vídeo
   window.case1Video = function(v, active){
+    var was = !!v._active; v._active = active;
     if (active){
-      if (current !== v){ current = v; if (loaded){ try { v.currentTime = 0; } catch(e){} } } // voltou ao centro: do começo
-      start(v);
+      if (current !== v){                  // chegou ao centro: toca do começo só depois que o slide parar
+        current = v; v._waiting = true;
+        afterMove(v.parentNode, function(){
+          v._waiting = false;
+          if (current !== v) return;         // já saiu do centro de novo
+          if (loaded){ try { v.currentTime = 0; } catch(e){} }
+          start(v);
+        });
+      } else if (v.paused) start(v);       // relayout (resize) com o mesmo slide no centro
     } else {
       if (current === v) current = null;
-      if (!v.paused) v.pause();
+      if (!v.paused) v.pause();            // saiu do centro: pausa já, sem mexer no currentTime
+      if (was) afterMove(v.parentNode, function(){
+        requestAnimationFrame(function(){ if (current !== v){ try { v.currentTime = 0; } catch(e){} } }); // vizinho volta ao quadro inicial (= pôster)
+      });
     }
   };
 
@@ -797,7 +821,8 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px}
   // Autoplay suave: só com a seção na tela, aba visível e sem interação recente
   var timer = null, visible = false, hovering = false, holdUntil = 0;
   function hold(){ holdUntil = Date.now() + 9000; }
-  function tick(){ if (visible && !hovering && !document.hidden && !down && Date.now() > holdUntil && !stage.contains(document.activeElement)) step(1); }
+  var lastScroll = 0; addEventListener('scroll', function(){ lastScroll = Date.now(); }, {passive:true}); // não troca de slide com a página rolando
+  function tick(){ if (visible && !hovering && !document.hidden && !down && Date.now() > holdUntil && Date.now() - lastScroll > 600 && !stage.contains(document.activeElement)) step(1); }
   if (!reduce){
     timer = setInterval(tick, 4500);
     stage.addEventListener('mouseenter', function(){ hovering = true; });
