@@ -652,17 +652,17 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px}
   if (!stage || !('IntersectionObserver' in window)) return;
   if (matchMedia('(prefers-reduced-motion: reduce)').matches) return; // sem vídeo: fica a imagem do celular (= pôster)
   var MAP = { 'img/case1_phone1.webp': 'case1_phone1', 'img/case1_phone2.webp': 'case1_phone2' };
+  var dbg = window.__case1VideoDbg = { err: '' }; // lido pelo painel ?debug=1
   stage.querySelectorAll('.phone-slide > img').forEach(function(img){
     var name = MAP[img.getAttribute('src')]; if (!name) return;
     var v = document.createElement('video');
     v.className = 'phone-vid';
+    // tudo isto antes de qualquer load(): iOS só reproduz inline e sem gesto se o vídeo já nascer mudo e inline
     v.muted = true; v.loop = true; v.playsInline = true; v.preload = 'none';
-    ['muted','loop','playsinline'].forEach(function(a){ v.setAttribute(a, ''); });
+    ['muted','loop','playsinline','webkit-playsinline'].forEach(function(a){ v.setAttribute(a, ''); });
     v.setAttribute('preload', 'none'); v.setAttribute('aria-hidden', 'true');
     v.setAttribute('poster', 'img/' + name + '_poster.webp');
-    [['webm','video/webm'],['mp4','video/mp4']].forEach(function(t){
-      var s = document.createElement('source'); s.setAttribute('data-src', 'video/' + name + '.' + t[0]); s.type = t[1]; v.appendChild(s);
-    });
+    var s = document.createElement('source'); s.setAttribute('data-src', 'video/' + name + '.mp4'); s.type = 'video/mp4'; v.appendChild(s); // só MP4 (H.264): compatível com iPhone
     img.parentNode.appendChild(v);
   });
 
@@ -672,9 +672,10 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px}
   function start(v){
     if (!v || !v.isConnected || !loaded || !onScreen || document.hidden) return;
     pauseAll(v); // nunca mais de um tocando
-    var p = v.play(); if (p && p.catch) p.catch(function(){});
+    var p = v.play();
+    if (p && p.catch) p.catch(function(e){ dbg.err = 'play(): ' + ((e && (e.name + ' ' + e.message)) || e); }); // fica o pôster
   }
-  function drop(v){ if (current === v) current = null; if (v.parentNode) v.parentNode.removeChild(v); } // fallback: fica a imagem
+  function drop(v){ dbg.err = 'error: ' + ((v.error && ('code ' + v.error.code)) || 'source'); if (current === v) current = null; if (v.parentNode) v.parentNode.removeChild(v); } // fallback: fica a imagem
 
   // Chamado pelo layout() do carrossel para cada slide com vídeo
   window.case1Video = function(v, active){
