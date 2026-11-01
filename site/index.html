@@ -288,6 +288,10 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px}
 @media (max-width:640px){.phone-stage{--pw:min(62vw,250px)}}
 @media (prefers-reduced-motion:reduce){.phone-slide{transition-duration:.01s!important}}
 </style>
+<style id="case1-video-css">
+/* Case 1 · vídeo encaixado na tela do celular: retângulo (27,128)–(528,1021) sobre a arte de 558×1119 */
+.phone-slide .phone-vid{position:absolute;left:4.8387%;top:11.4388%;width:89.7849%;height:79.8034%;border-radius:1.1976%/.6719%;object-fit:cover;display:block;pointer-events:none;background:transparent}
+</style>
 </head>
 <body>
 
@@ -637,6 +641,67 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px}
 })();
 </script>
 
+<script id="case1-video-js">
+/* Case 1 · vídeos reais nos celulares 1 e 2. Roda antes do carrossel para que as cópias clonadas herdem o vídeo. */
+(function(){
+  var stage = document.getElementById('phoneStage');
+  if (!stage || !('IntersectionObserver' in window)) return;
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return; // sem vídeo: fica a imagem do celular (= pôster)
+  var MAP = { 'img/case1_phone1.webp': 'case1_phone1', 'img/case1_phone2.webp': 'case1_phone2' };
+  stage.querySelectorAll('.phone-slide > img').forEach(function(img){
+    var name = MAP[img.getAttribute('src')]; if (!name) return;
+    var v = document.createElement('video');
+    v.className = 'phone-vid';
+    v.muted = true; v.loop = true; v.playsInline = true; v.preload = 'none';
+    ['muted','loop','playsinline'].forEach(function(a){ v.setAttribute(a, ''); });
+    v.setAttribute('preload', 'none'); v.setAttribute('aria-hidden', 'true');
+    v.setAttribute('poster', 'img/' + name + '_poster.webp');
+    [['webm','video/webm'],['mp4','video/mp4']].forEach(function(t){
+      var s = document.createElement('source'); s.setAttribute('data-src', 'video/' + name + '.' + t[0]); s.type = t[1]; v.appendChild(s);
+    });
+    img.parentNode.appendChild(v);
+  });
+
+  var loaded = false, onScreen = false, current = null;
+  function all(){ return Array.prototype.slice.call(stage.querySelectorAll('video.phone-vid')); }
+  function pauseAll(keep){ all().forEach(function(o){ if (o !== keep && !o.paused) o.pause(); }); }
+  function start(v){
+    if (!v || !v.isConnected || !loaded || !onScreen || document.hidden) return;
+    pauseAll(v); // nunca mais de um tocando
+    var p = v.play(); if (p && p.catch) p.catch(function(){});
+  }
+  function drop(v){ if (current === v) current = null; if (v.parentNode) v.parentNode.removeChild(v); } // fallback: fica a imagem
+
+  // Chamado pelo layout() do carrossel para cada slide com vídeo
+  window.case1Video = function(v, active){
+    if (active){
+      if (current !== v){ current = v; if (loaded){ try { v.currentTime = 0; } catch(e){} } } // voltou ao centro: do começo
+      start(v);
+    } else {
+      if (current === v) current = null;
+      if (!v.paused) v.pause();
+    }
+  };
+
+  // Lazy-load: os vídeos só são buscados quando o carrossel chega perto da tela
+  new IntersectionObserver(function(es, io){
+    if (!es.some(function(e){ return e.isIntersecting; })) return;
+    io.disconnect(); loaded = true;
+    all().forEach(function(v){
+      var ss = v.querySelectorAll('source');
+      ss[ss.length - 1].addEventListener('error', function(){ drop(v); });
+      v.addEventListener('error', function(){ drop(v); });
+      Array.prototype.forEach.call(ss, function(s){ s.src = s.getAttribute('data-src'); });
+      v.load();
+    });
+    start(current);
+  }, {rootMargin: '300px 0px'}).observe(stage);
+
+  // Pausa com a seção fora da tela ou com a aba oculta
+  new IntersectionObserver(function(es){ onScreen = es[0].isIntersecting; if (onScreen) start(current); else pauseAll(null); }, {threshold: .15}).observe(stage);
+  document.addEventListener('visibilitychange', function(){ if (document.hidden) pauseAll(null); else start(current); });
+})();
+</script>
 <script id="case1-carousel-js">
 /* Case 1 · carrossel de celulares sobrepostos (sem dependências) */
 (function(){
@@ -687,7 +752,7 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px}
       if (jump){ void s.offsetWidth; s.style.transition = ''; }
       s.classList.toggle('is-active', d === 0);
       var v = s.querySelector('video');
-      if (v){ if (d === 0){ v.muted = true; v.playsInline = true; var p = v.play(); if (p && p.catch) p.catch(function(){}); } else v.pause(); }
+      if (v){ if (window.case1Video) window.case1Video(v, d === 0); else if (d === 0){ v.muted = true; v.playsInline = true; var p = v.play(); if (p && p.catch) p.catch(function(){}); } else v.pause(); }
     });
     var cur = active % real;
     Array.prototype.forEach.call(dots.children, function(b, k){ b.setAttribute('aria-current', k === cur ? 'true' : 'false'); });
