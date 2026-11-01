@@ -45,6 +45,16 @@ A base continua sendo a do portfólio original: mesma ordem de seções, mesmos 
 
 ---
 
+## Ajustes da 1ª rodada de feedback (10/10/2026)
+
+- **Foto principal nova:** a foto em pé, gravando com o celular no tripé, entra no lugar da foto de óculos no topo. No computador ela aparece na horizontal (o fundo foi ampliado nas laterais) e no celular, na vertical. Tem moldura em degradê animado e um leve parallax ao rolar.
+- **Botão flutuante de WhatsApp** em todas as telas, com mensagem pronta ("Oi Karen! Vi seu portfólio e quero conversar.").
+- **Instagram corrigido** para [@karenmathias.sm](https://www.instagram.com/karenmathias.sm) em todo o site.
+- **Redes sociais no final da página**, só com os ícones: Instagram, LinkedIn e WhatsApp. O botão principal do final agora é "Chamar no WhatsApp".
+- **E-mail do topo copiável** com um toque.
+- O texto "BE_karenmathias_sm" do topo virou só "Behance".
+- **Case 1 em carrossel:** os 3 celulares viraram um carrossel com sobreposição. O celular que entra passa por cima do anterior e os vizinhos ficam parcialmente visíveis. Tem setas, arraste, teclado, autoplay suave e zoom no celular ativo.
+
 ## Roteiro de testes para a Karen
 
 Abra o link no **celular** e, se puder, no **computador**, e anote o que achar:
@@ -52,7 +62,7 @@ Abra o link no **celular** e, se puder, no **computador**, e anote o que achar:
 1. Os textos estão corretos? Algo para mudar, tirar ou acrescentar?
 2. As fotos e artes estão com boa qualidade? (Nesta versão, várias foram recortadas de gravação de tela.)
 3. O controle de antes e depois da Mutti funciona no seu celular?
-4. Os links do Instagram, do Behance e o botão "copiar" do e-mail funcionam?
+4. Os links do Instagram, do Behance, do LinkedIn e o botão do WhatsApp funcionam?
 5. Algum efeito está exagerado, lento ou atrapalhando a leitura?
 6. Faltou alguma seção ou algum trabalho que você queira mostrar?
 
@@ -62,7 +72,8 @@ Abra o link no **celular** e, se puder, no **computador**, e anote o que achar:
 - [ ] Confirmar os códigos de cor da Mutti (no Canva, três cores aparecem com o mesmo código, `#F86C51`).
 - [ ] Links dos reels do Case 1 (no Canva: "clique no celular para acessar os vídeos").
 - [ ] Confirmar o endereço do Behance (`behance.net/karenmathias_sm`).
-- [ ] Incluir o WhatsApp, se a Karen quiser.
+- [x] Botão de WhatsApp (falta confirmar o número).
+- [ ] Link do LinkedIn da Karen.
 - [ ] Publicar em produção no domínio `karenmathias.com.br`, sem `noindex`.
 
 ---

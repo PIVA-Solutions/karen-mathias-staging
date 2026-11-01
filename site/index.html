@@ -10,7 +10,8 @@
 <meta property="og:type" content="website">
 <meta property="og:title" content="Karen Mathias · Portfólio">
 <meta property="og:description" content="Social media, design e vídeos.">
-<meta property="og:image" content="https://karenmathias.pivasolutions.com.br/img/glasses.jpg">
+<meta property="og:image" content="https://karenmathias.pivasolutions.com.br/img/hero.jpg">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%2307040d'/%3E%3Ctext x='50' y='70' font-size='64' text-anchor='middle' fill='%23cdb2ff'%3E%E2%9C%A6%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -38,6 +39,7 @@
   color-scheme:dark;
 }
 *{box-sizing:border-box}
+[hidden]{display:none!important}
 html{scroll-behavior:smooth}
 body{margin:0;background:var(--space);color:var(--white);font-family:var(--serif);font-size:17px;line-height:1.65;-webkit-font-smoothing:antialiased;overflow-x:hidden}
 img{max-width:100%;display:block}
@@ -96,24 +98,26 @@ section{padding-block:clamp(70px,10vw,120px);position:relative;overflow:hidden;o
 .word{font:400 clamp(2.4rem,10.5vw,8.2rem) var(--wide);letter-spacing:.06em;line-height:1;margin:0;color:var(--white);white-space:nowrap;text-shadow:0 0 40px rgba(179,140,255,.45)}
 .word span{display:inline-block;animation:drop .8s cubic-bezier(.2,1.2,.3,1) both}
 @keyframes drop{from{transform:translateY(-40px);opacity:0;filter:blur(8px)}to{transform:none;opacity:1;filter:none}}
-.hero-stage{position:relative;width:min(100%,760px);display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:24px;margin-top:-6px}
-.roles{display:grid;gap:4px;text-align:right;font:italic 500 clamp(1.1rem,2.6vw,1.6rem) var(--serif);color:var(--lilac)}
-.roles span{opacity:.95}
-.halo{position:relative;width:clamp(200px,34vw,320px);aspect-ratio:1}
-.halo::before{content:"";position:absolute;inset:-14px;border-radius:50%;background:conic-gradient(from 0deg,#b48bff,#ff8fdc,#6a33d6,#b48bff);animation:rot 8s linear infinite;filter:blur(1px)}
-.halo::after{content:"";position:absolute;inset:-40px;border-radius:50%;background:radial-gradient(closest-side,rgba(142,92,255,.5),transparent);z-index:-1}
-@keyframes rot{to{transform:rotate(360deg)}}
-.halo img{position:relative;width:100%;height:100%;object-fit:cover;border-radius:50%;border:6px solid var(--space)}
-.socials{display:grid;gap:8px;text-align:left;font:italic 1rem var(--serif)}
+.hero-photo{position:relative;width:min(100%,980px);padding:2px;border-radius:30px;margin-top:4px;box-shadow:0 40px 90px -30px rgba(142,92,255,.75)}
+.hero-photo::before{content:"";position:absolute;inset:0;border-radius:30px;background:linear-gradient(120deg,#b48bff,#ff8fdc,#6a33d6,#cdb2ff,#b48bff);background-size:300% 300%;animation:flow 7s linear infinite}
+@keyframes flow{to{background-position:300% 0}}
+.hero-photo .frame{position:relative;border-radius:28px;overflow:hidden;aspect-ratio:16/10;background:#e9e6e3}
+.hero-photo img{width:100%;height:100%;object-fit:cover;object-position:50% 40%;transform:scale(1.06);will-change:transform}
+.hero-meta{width:min(100%,980px);display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:14px 24px}
+.roles{display:flex;gap:10px 22px;flex-wrap:wrap;font:italic 500 clamp(1.1rem,2.4vw,1.5rem) var(--serif);color:var(--lilac)}
+.roles span+span::before{content:"✦";margin-right:22px;font-style:normal;font-size:.7em;vertical-align:middle;color:var(--rose)}
+.socials{display:flex;flex-wrap:wrap;gap:8px 20px;text-align:left;font:italic 1rem var(--serif)}
 .socials a,.socials span{display:flex;align-items:center;gap:8px;text-decoration:none;color:var(--white)}
-.socials a:hover{color:var(--lilac)}
-.socials i{font-style:normal;width:22px;height:22px;border-radius:6px;background:rgba(255,255,255,.12);display:grid;place-items:center;font:700 .62rem var(--ui)}
+.socials button{display:flex;align-items:center;gap:8px;background:none;border:0;padding:0;font:inherit;color:var(--white);cursor:copy}
+.socials a:hover,.socials button:hover{color:var(--lilac)}
+.socials i{font-style:normal;width:24px;height:24px;border-radius:7px;background:rgba(255,255,255,.12);display:grid;place-items:center;font-size:.8rem}
 .hero-ctas{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-top:10px}
 @media (max-width:700px){
-  .hero-stage{grid-template-columns:1fr;justify-items:center;gap:22px}
-  .roles{text-align:center;grid-auto-flow:column;gap:14px;font-size:1.1rem;order:2}
-  .halo{order:1}
-  .socials{order:3;text-align:center;justify-items:center}
+  .hero-photo .frame{aspect-ratio:4/5}
+  .hero-photo img{object-position:50% 30%}
+  .hero-meta{flex-direction:column;justify-content:center}
+  .roles,.socials{justify-content:center}
+}
 }
 
 /* SOBRE MIM: nota de papel */
@@ -227,10 +231,11 @@ section{padding-block:clamp(70px,10vw,120px);position:relative;overflow:hidden;o
 .thanks .wrap{display:grid;justify-items:center;gap:22px;position:relative;z-index:1}
 .thanks h2{font-size:clamp(3.4rem,12vw,8rem)}
 .thanks h2 span{display:block}
-.contacts{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
-.contact{display:inline-flex;align-items:center;gap:8px;padding:10px 16px;border-radius:999px;background:rgba(255,255,255,.07);border:1px solid var(--line);text-decoration:none;font:600 .88rem var(--ui);transition:border-color .2s,background .2s}
-a.contact:hover{border-color:var(--lilac);background:rgba(142,92,255,.2)}
-.contact button{background:none;border:0;color:var(--lilac);font:700 .8rem var(--ui);cursor:pointer;text-decoration:underline;padding:0}
+.social-row{display:flex;gap:16px;justify-content:center;margin-top:6px}
+.social-row a{width:58px;height:58px;border-radius:50%;display:grid;place-items:center;font-size:1.5rem;color:var(--white);text-decoration:none;background:rgba(255,255,255,.07);border:1px solid var(--line);transition:transform .25s cubic-bezier(.2,1.4,.4,1),background .25s,border-color .25s,box-shadow .25s}
+.social-row a:hover{transform:translateY(-5px) scale(1.06);background:rgba(142,92,255,.28);border-color:var(--lilac);box-shadow:0 14px 30px -10px rgba(142,92,255,.9)}
+.social-row.in a{animation:pop .6s cubic-bezier(.2,1.4,.4,1) both}
+.social-row.in a:nth-child(2){animation-delay:.1s}.social-row.in a:nth-child(3){animation-delay:.2s}
 
 footer{padding-block:28px 120px;border-top:1px solid var(--line);font:500 .82rem var(--ui);color:var(--muted)}
 footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px}
@@ -245,12 +250,14 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px}
 .toast{position:fixed;left:50%;bottom:calc(96px + env(safe-area-inset-bottom,0px));transform:translate(-50%,16px);opacity:0;background:var(--white);color:var(--ink);border-radius:999px;padding:10px 18px;font:700 .9rem var(--ui);box-shadow:0 14px 30px rgba(0,0,0,.5);z-index:95;transition:opacity .25s,transform .25s;pointer-events:none}
 .toast.on{opacity:1;transform:translate(-50%,0)}
 
-.sticky-cta{position:fixed;left:50%;transform:translate(-50%,calc(100% + 40px));opacity:0;visibility:hidden;bottom:calc(12px + env(safe-area-inset-bottom,0px));width:min(480px,calc(100% - 24px));z-index:50;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:8px 8px 8px 18px;background:rgba(18,10,34,.92);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid var(--line);border-radius:999px;box-shadow:0 18px 40px rgba(0,0,0,.6);transition:transform .45s cubic-bezier(.2,1,.3,1),opacity .3s,visibility .3s}
-.sticky-cta.on{transform:translate(-50%,0);opacity:1;visibility:visible}
-.sticky-cta p{font:500 .8rem/1.25 var(--ui);color:var(--muted)}
-.sticky-cta p b{color:var(--white);display:block;font-size:.88rem}
-.sticky-cta .btn{padding:10px 18px;font-size:.85rem;white-space:nowrap}
-
+.wa-float{position:fixed;right:18px;bottom:calc(18px + env(safe-area-inset-bottom,0px));z-index:55;width:60px;height:60px;border-radius:50%;background:#25d366;color:#fff;display:grid;place-items:center;font-size:2rem;text-decoration:none;box-shadow:0 14px 30px -8px rgba(37,211,102,.6),0 6px 16px rgba(0,0,0,.4);transition:transform .25s cubic-bezier(.2,1.4,.4,1);animation:waIn .6s 1.2s cubic-bezier(.2,1.4,.4,1) both}
+.wa-float:hover{transform:scale(1.08)}
+.wa-float::before{content:"";position:absolute;inset:0;border-radius:50%;border:2px solid #25d366;animation:waRing 2.4s ease-out infinite}
+.wa-float .tip{position:absolute;right:72px;top:50%;transform:translateY(-50%);white-space:nowrap;background:var(--white);color:var(--ink);font:600 .85rem var(--ui);padding:8px 14px;border-radius:999px;box-shadow:0 10px 24px rgba(0,0,0,.4);opacity:0;pointer-events:none;transition:opacity .2s}
+.wa-float:hover .tip{opacity:1}
+@keyframes waRing{0%{transform:scale(1);opacity:.8}100%{transform:scale(1.6);opacity:0}}
+@keyframes waIn{from{transform:scale(0);opacity:0}to{transform:none;opacity:1}}
+@media (hover:none){.wa-float .tip{display:none}}
 .reveal.in{animation:rise .8s cubic-bezier(.2,.8,.2,1) both}
 .stagger.in>*{animation:rise .6s cubic-bezier(.2,.8,.2,1) both}
 .stagger.in>*:nth-child(2){animation-delay:.1s}.stagger.in>*:nth-child(3){animation-delay:.2s}.stagger.in>*:nth-child(4){animation-delay:.3s}.stagger.in>*:nth-child(5){animation-delay:.4s}
@@ -306,13 +313,15 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px}
     <span class="star3d" data-speed="0.25" style="--s:54px;right:12%;bottom:40px"><i></i></span>
     <div class="wrap">
       <h1 class="word" aria-label="Portfólio" id="word">PORTFÓLIO</h1>
-      <div class="hero-stage">
+      <div class="hero-photo">
+        <div class="frame"><picture><source media="(max-width:700px)" srcset="img/hero_vertical.jpg"><img id="heroImg" src="img/hero.jpg" alt="Karen Mathias gravando conteúdo com o celular no tripé"></picture></div>
+      </div>
+      <div class="hero-meta">
         <div class="roles"><span>Social media</span><span>Design</span><span>Vídeos</span></div>
-        <div class="halo"><img src="img/glasses.jpg" alt="Karen Mathias"></div>
         <div class="socials">
-          <a href="https://instagram.com/klika.studio" target="_blank" rel="noopener"><i>IG</i>@klika.studio</a>
-          <a href="https://www.behance.net/karenmathias_sm" target="_blank" rel="noopener"><i>Bē</i>BE_karenmathias_sm</a>
-          <span><i>@</i>kmsocialmedia.co@gmail.com</span>
+          <a href="https://www.instagram.com/karenmathias.sm" target="_blank" rel="noopener"><i class="fa-brands fa-instagram" aria-hidden="true"></i>@karenmathias.sm</a>
+          <a href="https://www.behance.net/karenmathias_sm" target="_blank" rel="noopener"><i class="fa-brands fa-behance" aria-hidden="true"></i>Behance</a>
+          <button type="button" id="copy-email" title="Copiar e-mail"><i class="fa-regular fa-envelope" aria-hidden="true"></i><span id="email">kmsocialmedia.co@gmail.com</span></button>
         </div>
       </div>
       <div class="hero-ctas">
@@ -505,11 +514,11 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px}
     <div class="wrap">
       <h2 class="retro reveal"><span>Muito</span><span class="grad">Obrigada!</span></h2>
       <p class="lead reveal">Vamos fazer sua marca crescer com estratégia? Me chama e eu te conto como posso ajudar.</p>
-      <a class="btn pulse" href="https://ig.me/m/klika.studio" target="_blank" rel="noopener">Chamar no Instagram <span class="arrow">→</span></a>
-      <div class="contacts">
-        <a class="contact" href="https://instagram.com/klika.studio" target="_blank" rel="noopener">@klika.studio</a>
-        <a class="contact" href="https://www.behance.net/karenmathias_sm" target="_blank" rel="noopener">Behance</a>
-        <span class="contact"><span id="email">kmsocialmedia.co@gmail.com</span><button id="copy-email" type="button">copiar</button></span>
+      <a class="btn pulse" href="https://wa.me/WHATSAPP_KAREN?text=Oi%20Karen!%20Vi%20seu%20portf%C3%B3lio%20e%20quero%20conversar." target="_blank" rel="noopener">Chamar no WhatsApp <span class="arrow">→</span></a>
+      <div class="social-row" id="socialRow">
+        <a href="https://www.instagram.com/karenmathias.sm" target="_blank" rel="noopener" aria-label="Instagram"><i class="fa-brands fa-instagram" aria-hidden="true"></i></a>
+        <a href="LINKEDIN_KAREN" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in" aria-hidden="true"></i></a>
+        <a href="https://wa.me/WHATSAPP_KAREN" target="_blank" rel="noopener" aria-label="WhatsApp"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i></a>
       </div>
     </div>
   </section>
@@ -519,10 +528,7 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px}
   <div class="wrap"><span>© 2026 Karen Mathias</span><span>Social media · Design · Vídeos · Site por <a href="https://www.instagram.com/pivasolutionss" target="_blank" rel="noopener">PIVA Solutions</a></span></div>
 </footer>
 
-<div class="sticky-cta" id="sticky">
-  <p><b>Karen Mathias</b>Social media · Design · Vídeos</p>
-  <a class="btn" href="#contato">Fale comigo →</a>
-</div>
+<a class="wa-float" href="https://wa.me/WHATSAPP_KAREN?text=Oi%20Karen!%20Vi%20seu%20portf%C3%B3lio%20e%20quero%20conversar." target="_blank" rel="noopener" aria-label="Falar com a Karen no WhatsApp"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i><span class="tip">Fale comigo</span></a>
 <div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="Imagem ampliada"><button type="button" aria-label="Fechar">×</button><img alt=""></div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
@@ -560,14 +566,13 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px}
   size(); addEventListener('resize', size); draw();
 
   // progresso, barra fixa e parallax
-  var bar = $('#progress'), sticky = $('#sticky'), floaters = $$('[data-speed]'), contato = $('#contato'), ticking = false;
+  var bar = $('#progress'), heroImg = $('#heroImg'), floaters = $$('[data-speed]'), contato = $('#contato'), ticking = false;
   function frame(){
     ticking = false;
     var h = document.documentElement, y = h.scrollTop, max = h.scrollHeight - h.clientHeight;
     scrollY0 = y;
     bar.style.width = (max > 0 ? y/max*100 : 0) + '%';
-    var r = contato.getBoundingClientRect();
-    sticky.classList.toggle('on', y > 700 && !(r.top < innerHeight && r.bottom > 0));
+    if (!reduce && heroImg && y < innerHeight*1.5) heroImg.style.transform = 'translateY(' + (y*0.12).toFixed(1) + 'px) scale(1.06)';
     if (!reduce) floaters.forEach(function(f){ var t = f.parentElement.getBoundingClientRect().top; f.style.transform = 'translateY(' + (t * +f.getAttribute('data-speed')).toFixed(1) + 'px)'; });
     if (reduce) draw();
   }
@@ -590,7 +595,7 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px}
         io.unobserve(el);
       });
     }, {threshold:.18});
-    $$('[data-count],.reveal,.stagger,#colors').forEach(function(el){ io.observe(el) });
+    $$('[data-count],.reveal,.stagger,#colors,#socialRow').forEach(function(el){ io.observe(el) });
   }
 
   // antes e depois
@@ -614,6 +619,9 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px}
   function closeLb(){ lb.classList.remove('on'); }
   lb.addEventListener('click', closeLb);
   addEventListener('keydown', function(e){ if (e.key === 'Escape') closeLb(); });
+
+  // contatos ainda não preenchidos ficam escondidos
+  ['WHATSAPP','LINKEDIN'].forEach(function(k){ $$('a[href*="' + k + '_' + 'KAREN"]').forEach(function(el){ el.hidden = true; }); });
 
   // copiar e-mail
   var toastEl = $('#toast'), tt;
