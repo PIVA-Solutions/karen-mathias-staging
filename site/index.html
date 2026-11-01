@@ -835,5 +835,41 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px}
   layout();
 })();
 </script>
+<script id="case1-debug-js">
+/* Case 1 · painel de diagnóstico. Só existe com ?debug=1 na URL; sem o parâmetro, nada aqui roda. */
+(function(){
+  if (new URLSearchParams(location.search).get('debug') !== '1') return;
+  var stage = document.getElementById('phoneStage'); if (!stage) return;
+  var te = 0; // último transitionend (transform) de um celular, em ms desde o carregamento
+  stage.addEventListener('transitionend', function(e){
+    if (e.propertyName === 'transform' && e.target.classList && e.target.classList.contains('phone-slide')) te = Math.round(performance.now());
+  });
+  var box = document.createElement('pre');
+  box.id = 'case1Debug';
+  box.style.cssText = 'position:fixed;left:8px;bottom:calc(8px + env(safe-area-inset-bottom,0px));z-index:60;margin:0;padding:6px 8px;max-width:min(60vw,250px);' +
+    'background:rgba(0,0,0,.78);color:#b9ffb0;font:10px/1.35 ui-monospace,Menlo,Consolas,monospace;white-space:pre-wrap;word-break:break-all;border-radius:6px;pointer-events:none';
+  document.body.appendChild(box);
+  function f(n){ return typeof n === 'number' ? n.toFixed(2) : String(n); }
+  function render(){
+    var slides = Array.prototype.slice.call(stage.querySelectorAll('.phone-slide'));
+    var real = slides.filter(function(s){ return !s.hasAttribute('aria-hidden'); }).length || 1;
+    var i = slides.findIndex(function(s){ return s.classList.contains('is-active'); });
+    var v = i >= 0 ? slides[i].querySelector('video') : null;
+    var d = window.__case1VideoDbg, now = Math.round(performance.now());
+    var L = ['slide ativo: ' + (i >= 0 ? (i % real) + 1 : '-') + '/' + real + (i >= real ? ' (cópia)' : '')];
+    if (v){
+      L.push('paused: ' + v.paused + '  readyState: ' + v.readyState + '  networkState: ' + v.networkState);
+      L.push('currentTime: ' + f(v.currentTime) + '  ' + v.videoWidth + '×' + v.videoHeight);
+      L.push('src: ' + ((v.currentSrc || '').split('/').pop() || '-'));
+      if ('webkitDisplayingFullscreen' in v) L.push('webkitDisplayingFullscreen: ' + v.webkitDisplayingFullscreen);
+    } else L.push(d ? 'vídeo: nenhum neste slide (imagem)' : 'vídeo: desativado (reduced-motion ou sem suporte)');
+    L.push('último erro: ' + ((d && d.err) || '-'));
+    L.push('visibility: ' + document.visibilityState);
+    L.push('transitionend: ' + (te ? te + ' ms (há ' + (now - te) + ' ms)' : '-'));
+    box.textContent = L.join('\n');
+  }
+  render(); setInterval(render, 500);
+})();
+</script>
 </body>
 </html>
