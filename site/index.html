@@ -45,7 +45,7 @@
 [hidden]{display:none!important}
 html{scroll-behavior:smooth}
 body{margin:0;background:var(--space);color:var(--white);font-family:var(--serif);font-size:17px;line-height:1.65;-webkit-font-smoothing:antialiased;overflow-x:hidden}
-img{max-width:100%;display:block}
+img{max-width:100%;height:auto;display:block}
 a{color:inherit}
 button{font:inherit;color:inherit}
 p{margin:0}
@@ -354,7 +354,7 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px}
     <div class="wrap">
       <h1 class="word" aria-label="Portfólio" id="word">PORTFÓLIO</h1>
       <div class="hero-photo">
-        <div class="frame"><picture><source media="(max-width:700px)" srcset="img/hero_vertical.jpg"><img id="heroImg" src="img/hero.jpg" alt="Karen Mathias gravando conteúdo com o celular no tripé"></picture></div>
+        <div class="frame"><picture><source media="(max-width:700px)" srcset="img/hero_vertical.jpg" width="843" height="1264"><img id="heroImg" src="img/hero.jpg" width="1600" height="1000" loading="eager" fetchpriority="high" alt="Karen Mathias gravando conteúdo com o celular no tripé"></picture></div>
       </div>
       <div class="hero-meta">
         <div class="roles"><span>Social media</span><span>Design</span><span>Vídeos</span></div>
@@ -383,7 +383,7 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px}
           <span class="corner-star" aria-hidden="true">✦</span>
         </div>
       </div>
-      <div class="circle reveal"><img src="img/glasses.jpg" alt="Karen Mathias de óculos"></div>
+      <div class="circle reveal"><img src="img/glasses.jpg" width="385" height="400" loading="lazy" decoding="async" alt="Karen Mathias de óculos"></div>
     </div>
   </section>
 
@@ -391,11 +391,11 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px}
   <section>
     <span class="star3d pink" data-speed="-0.12" style="--s:46px;right:6%;top:60px"><i></i></span>
     <div class="wrap cert">
-      <div class="cert-photo reveal"><img src="img/portrait.jpg" alt="Karen Mathias sorrindo"></div>
+      <div class="cert-photo reveal"><img src="img/portrait.jpg" width="800" height="1000" loading="lazy" decoding="async" alt="Karen Mathias sorrindo"></div>
       <div class="cert-copy reveal">
         <h2 class="retro">Certificados <span class="sparkle">✦</span></h2>
         <p class="lead">Sou formada em Administração, Marketing Digital e Vendas, tenho também certificações na área de Social Media. Estou sempre ampliando meu olhar sobre os conteúdos nas redes sociais e me permitindo enxergá-las além da criação e estratégia de conteúdo.</p>
-        <button class="zoom" data-src="img/certificados.jpg" aria-label="Ampliar certificados"><img src="img/certificados.jpg" alt="Certificados da Universidade Paulista, Anhembi Morumbi, UniAmérica e Social Media na Prática"></button>
+        <button class="zoom" data-src="img/certificados.jpg" aria-label="Ampliar certificados"><img src="img/certificados.jpg" width="570" height="443" loading="lazy" decoding="async" alt="Certificados da Universidade Paulista, Anhembi Morumbi, UniAmérica e Social Media na Prática"></button>
       </div>
     </div>
   </section>
@@ -430,8 +430,8 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px}
       </div>
       <div class="compare-wrap reveal">
         <div class="compare" id="compare">
-          <img src="img/mutti_antes.jpg" alt="Perfil da Mutti antes, com 36 seguidores">
-          <img class="after" src="img/mutti_depois.jpg" alt="Perfil da Mutti depois, com 1.264 seguidores">
+          <img src="img/mutti_antes.jpg" width="265" height="380" loading="lazy" decoding="async" alt="Perfil da Mutti antes, com 36 seguidores">
+          <img class="after" src="img/mutti_depois.jpg" width="265" height="380" loading="lazy" decoding="async" alt="Perfil da Mutti depois, com 1.264 seguidores">
           <span class="tag l">Antes</span><span class="tag r">Depois</span>
           <div class="handle"></div>
           <input type="range" id="compare-range" min="0" max="100" value="50" aria-label="Comparar antes e depois">
@@ -451,16 +451,16 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px}
         <p class="lead" style="margin-top:14px">A Mutti disponibilizou seu padrão de tipografia para ser seguido em todos os materiais de comunicação.</p>
       </div>
       <div class="type-grid">
-        <button class="zoom reveal" data-src="img/tipo_cursiva.jpg" aria-label="Ampliar tipografia cursiva"><img src="img/tipo_cursiva.jpg" alt="Folha da fonte cursiva Kitten Swash Monoline"></button>
+        <button class="zoom reveal" data-src="img/tipo_cursiva.jpg" aria-label="Ampliar tipografia cursiva"><img src="img/tipo_cursiva.jpg" width="823" height="895" loading="lazy" decoding="async" alt="Folha da fonte cursiva Kitten Swash Monoline"></button>
         <div class="type-side">
           <div class="type-block reveal">
-            <button class="zoom" data-src="img/tipo_cursiva_app.jpg" aria-label="Ampliar aplicação da cursiva"><img src="img/tipo_cursiva_app.jpg" alt="Fonte cursiva aplicada nas embalagens Mutti"></button>
+            <button class="zoom" data-src="img/tipo_cursiva_app.jpg" aria-label="Ampliar aplicação da cursiva"><img src="img/tipo_cursiva_app.jpg" width="1098" height="452" loading="lazy" decoding="async" alt="Fonte cursiva aplicada nas embalagens Mutti"></button>
           </div>
           <div class="type-block reveal">
             <p class="sub">Sans Serifa</p>
             <p>A empresa exigia que esse padrão fosse respeitado, garantindo uniformidade e coerência em todas as representações visuais da marca.</p>
-            <button class="zoom" data-src="img/tipo_sans.jpg" aria-label="Ampliar tipografia sans serifa"><img src="img/tipo_sans.jpg" alt="Folha da fonte Rhode Bold Condensed"></button>
-            <button class="zoom" data-src="img/tipo_sans_app.jpg" aria-label="Ampliar aplicação da sans serifa"><img src="img/tipo_sans_app.jpg" alt="Fonte sans serifa aplicada em post da Mutti"></button>
+            <button class="zoom" data-src="img/tipo_sans.jpg" aria-label="Ampliar tipografia sans serifa"><img src="img/tipo_sans.jpg" width="802" height="759" loading="lazy" decoding="async" alt="Folha da fonte Rhode Bold Condensed"></button>
+            <button class="zoom" data-src="img/tipo_sans_app.jpg" aria-label="Ampliar aplicação da sans serifa"><img src="img/tipo_sans_app.jpg" width="1098" height="549" loading="lazy" decoding="async" alt="Fonte sans serifa aplicada em post da Mutti"></button>
           </div>
         </div>
       </div>
@@ -492,17 +492,17 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px}
         <p class="lead" style="margin-top:14px">A empresa também forneceu a Logo para personalização e as imagens em png para os criativos.</p>
       </div>
       <div class="duo">
-        <button class="zoom reveal" data-src="img/mutti_polpa.jpg" aria-label="Ampliar criativo Mutti Polpa"><img src="img/mutti_polpa.jpg" alt="Criativo Mutti Polpa, tomates finamente picados"></button>
+        <button class="zoom reveal" data-src="img/mutti_polpa.jpg" aria-label="Ampliar criativo Mutti Polpa"><img src="img/mutti_polpa.jpg" width="760" height="1300" loading="lazy" decoding="async" alt="Criativo Mutti Polpa, tomates finamente picados"></button>
         <div class="stack">
           <div class="reveal">
-            <button class="zoom" data-src="img/mutti_produtos.jpg" aria-label="Ampliar logo e produtos"><img src="img/mutti_produtos.jpg" alt="Logo Mutti original e versão Professional com produtos"></button>
+            <button class="zoom" data-src="img/mutti_produtos.jpg" aria-label="Ampliar logo e produtos"><img src="img/mutti_produtos.jpg" width="1095" height="335" loading="lazy" decoding="async" alt="Logo Mutti original e versão Professional com produtos"></button>
             <p class="caption">Original → Foodservice Professional</p>
           </div>
           <div class="reveal">
             <h2 class="retro" style="font-size:clamp(2.2rem,5vw,3.2rem)">Instagram</h2>
             <p class="sub">Posts</p>
             <p class="lead" style="margin-block:12px 16px">Todos os posts seguiram os padrões de cores e tipografia da marca, refletindo sua personalidade. Cada elemento foi escolhido para garantir uma comunicação coesa, profissional e uma presença digital consistente e marcante.</p>
-            <button class="zoom" data-src="img/mutti_feed.jpg" aria-label="Ampliar feed do Instagram"><img src="img/mutti_feed.jpg" alt="Feed do Instagram da Mutti Professional"></button>
+            <button class="zoom" data-src="img/mutti_feed.jpg" aria-label="Ampliar feed do Instagram"><img src="img/mutti_feed.jpg" width="990" height="396" loading="lazy" decoding="async" alt="Feed do Instagram da Mutti Professional"></button>
           </div>
         </div>
       </div>
@@ -519,9 +519,9 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px}
           <ul><li>Construção e posicionamento da marca</li><li>Estratégia e planejamento de conteúdo</li><li>Identidade visual e direção criativa</li><li>Criação de conteúdos autorais</li><li>Roteiros, gravação e edição de vídeos</li><li>Desenvolvimento de projetos e pré-lançamentos</li><li>Captação de conteúdos presencialmente para pré-lançamento</li><li>Foco em autoridade, conexão e posicionamento digital</li></ul></div>
         <div class="phone-stage" id="phoneStage" tabindex="0" role="region" aria-roledescription="carrossel" aria-label="Vídeos do Case 1. Use as setas do teclado para navegar.">
           <div class="phone-track">
-            <figure class="phone-slide"><img src="img/case1_phone1.webp" alt="Vídeo com o planeta Terra e o número 840 mil" draggable="false"></figure>
-            <figure class="phone-slide"><img src="img/case1_phone2.webp" alt="Vídeo em aeroporto, Mayara conduzindo a câmera pela mão" draggable="false"></figure>
-            <figure class="phone-slide"><img src="img/case1_phone3.webp" alt="Mayara falando sobre a NR-1" draggable="false"></figure>
+            <figure class="phone-slide"><img src="img/case1_phone1.webp" width="558" height="1119" loading="lazy" decoding="async" alt="Vídeo com o planeta Terra e o número 840 mil" draggable="false"></figure>
+            <figure class="phone-slide"><img src="img/case1_phone2.webp" width="558" height="1119" loading="lazy" decoding="async" alt="Vídeo em aeroporto, Mayara conduzindo a câmera pela mão" draggable="false"></figure>
+            <figure class="phone-slide"><img src="img/case1_phone3.webp" width="558" height="1119" loading="lazy" decoding="async" alt="Mayara falando sobre a NR-1" draggable="false"></figure>
           </div>
           <div class="phone-ctrl">
             <button type="button" class="phone-nav" data-dir="-1" aria-label="Vídeo anterior">←</button>
@@ -530,19 +530,19 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px}
           </div>
           <p class="phone-hint">Arraste para o lado ou toque no celular para ampliar</p>
         </div>
-        <button class="zoom" data-src="img/case1_posts.jpg" aria-label="Ampliar posts do case 1"><img src="img/case1_posts.jpg" alt="Posts em tons de laranja sobre a NR-1"></button>
+        <button class="zoom" data-src="img/case1_posts.jpg" aria-label="Ampliar posts do case 1"><img src="img/case1_posts.jpg" width="1134" height="560" loading="lazy" decoding="async" alt="Posts em tons de laranja sobre a NR-1"></button>
       </article>
       <article class="case reveal">
         <span class="num">Case 2</span>
         <div class="case-info"><h3>Graziele <span>| Psicóloga</span></h3>
           <ul><li>Reestruturação e reativação do perfil</li><li>Posicionamento e estratégia de comunicação</li><li>Desenvolvimento de identidade visual</li><li>Criação de conteúdo autoral alinhado à atuação profissional</li></ul></div>
-        <button class="zoom" data-src="img/case2.jpg" aria-label="Ampliar case 2"><img src="img/case2.jpg" alt="Capa do projeto de social media da psicóloga Graziele"></button>
+        <button class="zoom" data-src="img/case2.jpg" aria-label="Ampliar case 2"><img src="img/case2.jpg" width="570" height="293" loading="lazy" decoding="async" alt="Capa do projeto de social media da psicóloga Graziele"></button>
       </article>
       <article class="case reveal">
         <span class="num">Case 3</span>
         <div class="case-info"><h3>Luísa <span>| Psicóloga</span></h3>
           <ul><li>Profissionalização e reestruturação do perfil</li><li>Identidade visual própria</li><li>Planejamento editorial</li><li>Conteúdo autoral estratégico</li><li>Roteiros e edição de vídeos</li><li>Foco em alcance, autoridade e engajamento</li></ul></div>
-        <button class="zoom" data-src="img/case3.jpg" aria-label="Ampliar case 3"><img src="img/case3.jpg" alt="Posts sobre saúde mental para a psicóloga Luísa"></button>
+        <button class="zoom" data-src="img/case3.jpg" aria-label="Ampliar case 3"><img src="img/case3.jpg" width="1100" height="339" loading="lazy" decoding="async" alt="Posts sobre saúde mental para a psicóloga Luísa"></button>
       </article>
     </div>
   </section>
@@ -699,6 +699,7 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px}
     v.muted = true; v.loop = true; v.playsInline = true; v.preload = 'none';
     ['muted','loop','playsinline','webkit-playsinline'].forEach(function(a){ v.setAttribute(a, ''); });
     v.setAttribute('preload', 'none'); v.setAttribute('aria-hidden', 'true');
+    v.setAttribute('width', '540'); v.setAttribute('height', '960'); // proporção do pôster (540×960)
     v.setAttribute('poster', 'img/' + name + '_poster.webp');
     var s = document.createElement('source'); s.setAttribute('data-src', 'video/' + name + '.mp4'); s.type = 'video/mp4'; v.appendChild(s); // só MP4 (H.264): compatível com iPhone
     img.parentNode.appendChild(v);
