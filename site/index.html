@@ -274,6 +274,8 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px}
 .stagger.in>*:nth-child(2){transition-delay:.1s}.stagger.in>*:nth-child(3){transition-delay:.2s}.stagger.in>*:nth-child(4){transition-delay:.3s}.stagger.in>*:nth-child(5){transition-delay:.4s}
 /* animações infinitas decorativas pausadas enquanto o elemento está fora da tela (classe posta pelo JS) */
 .loop-off,.loop-off::before,.loop-off::after,.loop-off i{animation-play-state:paused!important}
+/* ?perf=noloop: todas as animações infinitas decorativas paradas */
+.perf-noloop .pulse::after,.perf-noloop .hero-photo::before,.perf-noloop .star3d i,.perf-noloop .sparkle,.perf-noloop .corner-star,.perf-noloop .wa-float::before{animation:none!important}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
 </style>
 <style id="case1-carousel-css">
@@ -306,13 +308,14 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px}
 .phone-slide .phone-vid{position:absolute;left:4.8387%;top:11.4388%;width:89.7849%;height:79.8034%;border-radius:1.1976%/.6719%;object-fit:cover;display:block;pointer-events:none;background:transparent}
 </style>
 <script id="perf-keys-js">
-/* Diagnóstico de performance: chaves ?perf=a,b (noblur, stars1x, nostars, noparallax, lazyimg, all).
+/* Diagnóstico de performance: chaves ?perf=a,b (noblur, stars1x, nostars, noparallax, lazyimg, noreveal, noloop, all).
    Sem o parâmetro, window.__perf fica vazio e nada no site muda. */
 (function(){
   var m = /[?&]perf=([^&#]*)/.exec(location.search), P = {};
   if (m) decodeURIComponent(m[1]).split(',').forEach(function(k){ k = k.trim().toLowerCase(); if (k) P[k] = true; });
-  if (P.all) P.noblur = P.stars1x = P.nostars = P.noparallax = P.lazyimg = true;
+  if (P.all) P.noblur = P.stars1x = P.nostars = P.noparallax = P.lazyimg = P.noreveal = P.noloop = true;
   window.__perf = P;
+  if (P.noloop) document.documentElement.classList.add('perf-noloop'); // noloop: animações infinitas decorativas paradas (CSS)
   if (P.noblur){ // sem backdrop-filter em lugar nenhum; fundos sólidos equivalentes
     var st = document.createElement('style'); st.id = 'perf-noblur';
     st.textContent = '*,*::before,*::after{-webkit-backdrop-filter:none!important;backdrop-filter:none!important}' +
@@ -936,6 +939,8 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px}
     var cut = performance.now() - 10000, n10 = 0, max10 = 0;
     gaps = gaps.filter(function(g){ return g[0] >= cut; });
     gaps.forEach(function(g){ if (g[1] > 50) n10++; if (g[1] > max10) max10 = g[1]; });
+    var vids = Array.prototype.slice.call(stage.querySelectorAll('video'));
+    L.push('vídeos carregados: ' + vids.filter(function(x){ return x.readyState >= 2; }).length + '/' + vids.length + '  tocando: ' + vids.filter(function(x){ return !x.paused; }).length);
     L.push('— rolagem —');
     L.push('travadas 10 s: ' + n10 + '  maior: ' + Math.round(max10) + ' ms');
     L.push('travadas desde zerar: ' + total + ' (' + Math.round((performance.now() - since) / 1000) + ' s)');
