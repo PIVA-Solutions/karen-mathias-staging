@@ -72,8 +72,10 @@ section{padding-block:clamp(70px,10vw,120px);position:relative;overflow:hidden;o
 .btn:hover{transform:translateY(-2px);box-shadow:0 16px 40px -8px rgba(179,140,255,.9)}
 .btn.ghost{background:rgba(255,255,255,.06);color:var(--white);border:1px solid var(--line);box-shadow:none}
 .btn.ghost:hover{border-color:var(--lilac)}
-.pulse{animation:glow 2.6s ease-in-out infinite}
-@keyframes glow{0%,100%{box-shadow:0 10px 30px -8px rgba(179,140,255,.6)}50%{box-shadow:0 10px 46px -2px rgba(255,143,220,.85)}}
+/* .pulse: brilho em ::after com box-shadow fixo; só a opacity anima (composta na GPU). Base = início do antigo glow, ::after = meio dele */
+.pulse,.pulse:hover{position:relative;box-shadow:0 10px 30px -8px rgba(179,140,255,.6)}
+.pulse::after{content:"";position:absolute;inset:0;border-radius:inherit;box-shadow:0 10px 46px -2px rgba(255,143,220,.85);opacity:0;pointer-events:none;animation:glow 2.6s ease-in-out infinite}
+@keyframes glow{0%,100%{opacity:0}50%{opacity:1}}
 .btn .arrow{transition:transform .2s}
 .btn:hover .arrow{transform:translateX(4px)}
 
@@ -101,9 +103,10 @@ section{padding-block:clamp(70px,10vw,120px);position:relative;overflow:hidden;o
 .word{font:400 clamp(2.4rem,10.5vw,8.2rem) var(--wide);letter-spacing:.06em;line-height:1;margin:0;color:var(--white);white-space:nowrap;text-shadow:0 0 40px rgba(179,140,255,.45)}
 .word span{display:inline-block;animation:drop .8s cubic-bezier(.2,1.2,.3,1) both}
 @keyframes drop{from{transform:translateY(-40px);opacity:0;filter:blur(8px)}to{transform:none;opacity:1;filter:none}}
-.hero-photo{position:relative;width:min(100%,980px);padding:2px;border-radius:30px;margin-top:4px;box-shadow:0 40px 90px -30px rgba(142,92,255,.75)}
-.hero-photo::before{content:"";position:absolute;inset:0;border-radius:30px;background:linear-gradient(120deg,#b48bff,#ff8fdc,#6a33d6,#cdb2ff,#b48bff);background-size:300% 300%;animation:flow 7s linear infinite}
-@keyframes flow{to{background-position:300% 0}}
+.hero-photo{position:relative;width:min(100%,980px);padding:2px;border-radius:30px;margin-top:4px;box-shadow:0 40px 90px -30px rgba(142,92,255,.75);overflow:hidden}
+/* borda animada: quadrado com gradiente cônico maior que a diagonal da moldura, girando por transform; o overflow da moldura recorta nos 2px de borda */
+.hero-photo::before{content:"";position:absolute;left:50%;top:50%;width:122%;aspect-ratio:1;background:conic-gradient(from 0deg,#b48bff,#ff8fdc,#6a33d6,#cdb2ff,#b48bff);transform:translate(-50%,-50%);animation:flow 7s linear infinite}
+@keyframes flow{from{transform:translate(-50%,-50%) rotate(0)}to{transform:translate(-50%,-50%) rotate(360deg)}}
 .hero-photo .frame{position:relative;border-radius:28px;overflow:hidden;aspect-ratio:16/10;background:#e9e6e3}
 .hero-photo img{width:100%;height:100%;object-fit:cover;object-position:50% 40%;transform:scale(1.06);will-change:transform}
 .hero-meta{width:min(100%,980px);display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:14px 24px}
@@ -117,6 +120,7 @@ section{padding-block:clamp(70px,10vw,120px);position:relative;overflow:hidden;o
 .hero-ctas{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-top:10px}
 @media (max-width:700px){
   .hero-photo .frame{aspect-ratio:4/5}
+  .hero-photo::before{width:165%}
   .hero-photo img{object-position:50% 30%}
   .hero-meta{flex-direction:column;justify-content:center}
   .roles,.socials{justify-content:center}
@@ -268,6 +272,8 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px}
 .reveal.in{transition:opacity .8s cubic-bezier(.2,.8,.2,1),transform .8s cubic-bezier(.2,.8,.2,1)}
 .stagger.in>*{transition:opacity .6s cubic-bezier(.2,.8,.2,1),transform .6s cubic-bezier(.2,.8,.2,1)}
 .stagger.in>*:nth-child(2){transition-delay:.1s}.stagger.in>*:nth-child(3){transition-delay:.2s}.stagger.in>*:nth-child(4){transition-delay:.3s}.stagger.in>*:nth-child(5){transition-delay:.4s}
+/* animações infinitas decorativas pausadas enquanto o elemento está fora da tela (classe posta pelo JS) */
+.loop-off,.loop-off::before,.loop-off::after,.loop-off i{animation-play-state:paused!important}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
 </style>
 <style id="case1-carousel-css">
@@ -645,6 +651,12 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px}
     if (!reduce && !PERF.noreveal) $$('.reveal,.stagger,#colors,#socialRow').forEach(function(el){
       if (el.getBoundingClientRect().top >= innerHeight){ el.classList.add('pre'); io.observe(el); }
     });
+  }
+
+  // animações infinitas decorativas só rodam com o elemento na tela
+  if (!reduce && 'IntersectionObserver' in window){
+    var lio = new IntersectionObserver(function(es){ es.forEach(function(en){ en.target.classList.toggle('loop-off', !en.isIntersecting); }); });
+    $$('.pulse,.hero-photo,.star3d,.sparkle,.corner-star').forEach(function(el){ lio.observe(el); });
   }
 
   // antes e depois
