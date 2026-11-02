@@ -206,9 +206,9 @@ section{padding-block:clamp(70px,10vw,120px);position:relative;overflow:hidden;o
 .dot b{font:600 .95rem var(--ui);text-decoration:underline;text-underline-offset:3px}
 .dot span{font-size:.8rem;line-height:1.35;margin-top:6px}
 .dot.gold{color:#2a1a00}
-.colors.in .dot{animation:pop .6s cubic-bezier(.2,1.4,.4,1) both}
-.colors.in .dot:nth-child(2){animation-delay:.1s}.colors.in .dot:nth-child(3){animation-delay:.2s}.colors.in .dot:nth-child(4){animation-delay:.3s}.colors.in .dot:nth-child(5){animation-delay:.4s}
-@keyframes pop{from{transform:scale(.6);opacity:.1}to{transform:none;opacity:1}}
+.colors.pre .dot{opacity:0;transform:scale(.6)}
+.colors.in .dot{transition:opacity .6s cubic-bezier(.2,1.4,.4,1),transform .6s cubic-bezier(.2,1.4,.4,1)}
+.colors.in .dot:nth-child(2){transition-delay:.1s}.colors.in .dot:nth-child(3){transition-delay:.2s}.colors.in .dot:nth-child(4){transition-delay:.3s}.colors.in .dot:nth-child(5){transition-delay:.4s}
 
 /* LOGO E IMAGENS + INSTAGRAM */
 .duo{display:grid;grid-template-columns:.75fr 1.25fr;gap:22px;margin-top:36px;align-items:start}
@@ -237,8 +237,9 @@ section{padding-block:clamp(70px,10vw,120px);position:relative;overflow:hidden;o
 .social-row{display:flex;gap:16px;justify-content:center;margin-top:6px}
 .social-row a{width:58px;height:58px;border-radius:50%;display:grid;place-items:center;font-size:1.5rem;color:var(--white);text-decoration:none;background:rgba(255,255,255,.07);border:1px solid var(--line);transition:transform .25s cubic-bezier(.2,1.4,.4,1),background .25s,border-color .25s,box-shadow .25s}
 .social-row a:hover{transform:translateY(-5px) scale(1.06);background:rgba(142,92,255,.28);border-color:var(--lilac);box-shadow:0 14px 30px -10px rgba(142,92,255,.9)}
-.social-row.in a{animation:pop .6s cubic-bezier(.2,1.4,.4,1) both}
-.social-row.in a:nth-child(2){animation-delay:.1s}.social-row.in a:nth-child(3){animation-delay:.2s}
+.social-row.pre a{opacity:0;transform:scale(.6)}
+.social-row.in a{transition:opacity .6s cubic-bezier(.2,1.4,.4,1),transform .6s cubic-bezier(.2,1.4,.4,1)}
+.social-row.in a:nth-child(2){transition-delay:.1s}.social-row.in a:nth-child(3){transition-delay:.2s}
 
 footer{padding-block:28px 120px;border-top:1px solid var(--line);font:500 .82rem var(--ui);color:var(--muted)}
 footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px}
@@ -261,10 +262,12 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px}
 @keyframes waRing{0%{transform:scale(1);opacity:.8}100%{transform:scale(1.6);opacity:0}}
 @keyframes waIn{from{transform:scale(0);opacity:0}to{transform:none;opacity:1}}
 @media (hover:none){.wa-float .tip{display:none}}
-.reveal.in{animation:rise .8s cubic-bezier(.2,.8,.2,1) both}
-.stagger.in>*{animation:rise .6s cubic-bezier(.2,.8,.2,1) both}
-.stagger.in>*:nth-child(2){animation-delay:.1s}.stagger.in>*:nth-child(3){animation-delay:.2s}.stagger.in>*:nth-child(4){animation-delay:.3s}.stagger.in>*:nth-child(5){animation-delay:.4s}
-@keyframes rise{from{transform:translateY(26px);opacity:.12}to{transform:none;opacity:1}}
+/* Entradas: só o que começa ABAIXO da primeira tela recebe .pre (marcado pelo JS). Ao entrar na tela, .pre -> .in por
+   transição (não keyframe): nada que já está visível pula, apaga ou reinicia. Sem JS ou com reduced-motion, nada recebe .pre. */
+.reveal.pre,.stagger.pre>*{opacity:0;transform:translateY(26px)}
+.reveal.in{transition:opacity .8s cubic-bezier(.2,.8,.2,1),transform .8s cubic-bezier(.2,.8,.2,1)}
+.stagger.in>*{transition:opacity .6s cubic-bezier(.2,.8,.2,1),transform .6s cubic-bezier(.2,.8,.2,1)}
+.stagger.in>*:nth-child(2){transition-delay:.1s}.stagger.in>*:nth-child(3){transition-delay:.2s}.stagger.in>*:nth-child(4){transition-delay:.3s}.stagger.in>*:nth-child(5){transition-delay:.4s}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
 </style>
 <style id="case1-carousel-css">
@@ -631,11 +634,17 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px}
       es.forEach(function(en){
         if (!en.isIntersecting) return;
         var el = en.target;
-        if (el.hasAttribute('data-count')) countUp(el); else el.classList.add('in');
-        io.unobserve(el);
+        io.unobserve(el);                                   // cada elemento anima uma vez só
+        if (el.hasAttribute('data-count')) { countUp(el); return; }
+        el.classList.remove('pre'); el.classList.add('in'); // transição do estado .pre para o final
+        setTimeout(function(){ el.classList.remove('in'); }, 1300); // depois, devolve as transições próprias do elemento (hover)
       });
     }, {threshold:.18});
-    $$('[data-count],.reveal,.stagger,#colors,#socialRow').forEach(function(el){ io.observe(el) });
+    $$('[data-count]').forEach(function(el){ io.observe(el) });
+    // entradas só para o que começa abaixo da primeira tela; o que já está visível no carregamento não anima
+    if (!reduce && !PERF.noreveal) $$('.reveal,.stagger,#colors,#socialRow').forEach(function(el){
+      if (el.getBoundingClientRect().top >= innerHeight){ el.classList.add('pre'); io.observe(el); }
+    });
   }
 
   // antes e depois
