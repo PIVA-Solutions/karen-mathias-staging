@@ -299,7 +299,10 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px}
 .phone-dots{display:flex;gap:8px}
 .phone-dots button{width:8px;height:8px;padding:0;border:0;border-radius:999px;background:rgba(255,255,255,.28);cursor:pointer;transition:width .4s cubic-bezier(.22,1,.36,1),background .3s}
 .phone-dots button[aria-current="true"]{width:26px;background:var(--lilac)}
-.phone-tap{position:absolute;left:49.73%;top:51.34%;z-index:2;transform:translate(-50%,-50%);opacity:0;pointer-events:none;color:#fff;font:700 calc(var(--pw) * .16)/1 var(--ui);text-shadow:0 2px 12px rgba(0,0,0,.55)}
+.phone-tap{position:absolute;left:49.73%;top:51.34%;z-index:2;width:calc(var(--pw) * .3);aspect-ratio:1;display:grid;place-items:center;border-radius:50%;background:radial-gradient(closest-side,rgba(0,0,0,.5) 68%,rgba(0,0,0,0));transform:translate(-50%,-50%);opacity:0;pointer-events:none}
+/* ícones desenhados em CSS (o caractere Ⅱ não existe na fonte do site e cai numa serifa fina) */
+.phone-tap[data-kind="pause"]::before{content:"";width:34%;height:38%;background:linear-gradient(90deg,#fff 0 34%,transparent 34% 66%,#fff 66%)}
+.phone-tap[data-kind="play"]::before{content:"";width:34%;height:40%;margin-left:8%;background:#fff;clip-path:polygon(0 0,100% 50%,0 100%)}
 .phone-hint{text-align:center;font:italic .9rem var(--serif);color:var(--muted);margin-top:10px}
 @media (max-width:640px){.phone-stage{--pw:min(62vw,250px)}}
 @media (prefers-reduced-motion:reduce){.phone-slide,.phone-slide::after{transition-duration:.01s!important}}
@@ -888,7 +891,7 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px}
   function tapFx(s, kind){ // "Ⅱ" ou "▶" no centro da tela do celular, some em ~400 ms (só opacity/transform)
     var fx = s.querySelector('.phone-tap');
     if (!fx){ fx = document.createElement('span'); fx.className = 'phone-tap'; fx.setAttribute('aria-hidden', 'true'); s.appendChild(fx); }
-    fx.textContent = kind === 'pause' ? 'Ⅱ' : '▶︎';
+    fx.setAttribute('data-kind', kind); // Ⅱ (pausou) ou ▶ (voltou), desenhados no CSS
     if (fx.animate) fx.animate([
       {opacity: 0, transform: 'translate(-50%,-50%) scale(.8)'},
       {opacity: 1, transform: 'translate(-50%,-50%) scale(1)', offset: .25},
