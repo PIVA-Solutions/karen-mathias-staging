@@ -299,6 +299,7 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px}
 .phone-dots{display:flex;gap:8px}
 .phone-dots button{width:8px;height:8px;padding:0;border:0;border-radius:999px;background:rgba(255,255,255,.28);cursor:pointer;transition:width .4s cubic-bezier(.22,1,.36,1),background .3s}
 .phone-dots button[aria-current="true"]{width:26px;background:var(--lilac)}
+.phone-tap{position:absolute;left:49.73%;top:51.34%;z-index:2;transform:translate(-50%,-50%);opacity:0;pointer-events:none;color:#fff;font:700 calc(var(--pw) * .16)/1 var(--ui);text-shadow:0 2px 12px rgba(0,0,0,.55)}
 .phone-hint{text-align:center;font:italic .9rem var(--serif);color:var(--muted);margin-top:10px}
 @media (max-width:640px){.phone-stage{--pw:min(62vw,250px)}}
 @media (prefers-reduced-motion:reduce){.phone-slide,.phone-slide::after{transition-duration:.01s!important}}
@@ -724,7 +725,7 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px}
   function all(){ return Array.prototype.slice.call(stage.querySelectorAll('video.phone-vid')); }
   function pauseAll(keep){ all().forEach(function(o){ if (o !== keep && !o.paused) o.pause(); }); }
   function start(v){
-    if (!v || !v.isConnected || v._waiting || !loaded || !onScreen || document.hidden) return;
+    if (!v || !v.isConnected || v._waiting || v._userPaused || !loaded || !onScreen || document.hidden) return; // pausado pelo toque: fica pausado
     pauseAll(v); // nunca mais de um tocando
     var p = v.play();
     if (p && p.catch) p.catch(function(e){ dbg.err = 'play(): ' + ((e && (e.name + ' ' + e.message)) || e); }); // fica o pôster
@@ -759,11 +760,26 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px}
       } else if (v.paused) start(v);       // relayout (resize) com o mesmo slide no centro
     } else {
       if (current === v) current = null;
+      v._userPaused = false;               // trocar de slide zera a pausa do usuário
       if (!v.paused) v.pause();            // saiu do centro: pausa já, sem mexer no currentTime
       if (was) afterMove(v.parentNode, function(){
         requestAnimationFrame(function(){ if (current !== v){ try { v.currentTime = 0; } catch(e){} } }); // vizinho volta ao quadro inicial (= pôster)
       });
     }
+  };
+
+  // Toque no celular do centro: pausa/continua do mesmo ponto (sem mexer no currentTime).
+  // Devolve 'pause' ou 'play'; false se o slide não tem vídeo utilizável (aí o carrossel abre o zoom).
+  window.case1VideoToggle = function(v){
+    if (!v || !v.isConnected || v.error) return false;
+    if (v._waiting && !v._userPaused){ v._userPaused = true; return 'pause'; } // ainda chegando ao centro: o toque impede que comece a tocar
+    if (v.paused){
+      v._userPaused = false; pauseAll(v);
+      var p = v.play(); if (p && p.catch) p.catch(function(e){ dbg.err = 'play(): ' + ((e && (e.name + ' ' + e.message)) || e); });
+      return 'play';
+    }
+    v._userPaused = true; v.pause();
+    return 'pause';
   };
 
   // Lazy-load: os vídeos só são buscados quando o carrossel chega perto da tela
@@ -840,7 +856,7 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px}
     var cur = active % real;
     Array.prototype.forEach.call(dots.children, function(b, k){ b.setAttribute('aria-current', k === cur ? 'true' : 'false'); });
   }
-  function go(i){ active = ((i % N) + N) % N; layout(); }
+  function go(i){ active = ((i % N) + N) % N; layout(); if (typeof label === 'function') label(); }
   function step(dir){ go(active + dir); }
 
   // Setas e teclado
@@ -851,11 +867,12 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px}
   });
 
   // Arrastar (mouse e toque) e clique
-  var sx = 0, sy = 0, dx = 0, down = false, moved = false;
-  track.addEventListener('pointerdown', function(e){ down = true; moved = false; sx = e.clientX; sy = e.clientY; dx = 0; });
+  var sx = 0, sy = 0, dx = 0, down = false, moved = false, far = false;
+  track.addEventListener('pointerdown', function(e){ down = true; moved = false; far = false; sx = e.clientX; sy = e.clientY; dx = 0; });
   addEventListener('pointermove', function(e){
     if (!down) return;
     dx = e.clientX - sx;
+    if (Math.abs(dx) >= 10 || Math.abs(e.clientY - sy) >= 10) far = true; // movimento de 10 px ou mais não é toque
     if (!moved && Math.abs(dx) > 10 && Math.abs(dx) > Math.abs(e.clientY - sy)){ moved = true; track.classList.add('dragging'); }
   });
   addEventListener('pointerup', function(){
@@ -863,20 +880,55 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px}
     if (moved && Math.abs(dx) > 40){ step(dx < 0 ? 1 : -1); hold(); }
   });
   addEventListener('pointercancel', function(){ down = false; track.classList.remove('dragging'); });
-  slides.forEach(function(s, i){
-    s.addEventListener('click', function(){
-      if (moved) return;
-      if (offset(i) !== 0){ go(i); hold(); return; }
-      var lb = document.getElementById('lb'); // zoom do site, se existir
-      if (lb){ var img = lb.querySelector('img'), src = s.querySelector('img'); if (img && src){ img.src = src.getAttribute('src'); img.alt = src.alt; lb.classList.add('on'); } }
+  // Celular do centro: com vídeo, o toque pausa/continua; sem vídeo (ou vídeo que falhou), abre o zoom
+  function zoom(s){
+    var lb = document.getElementById('lb'); // zoom do site, se existir
+    if (lb){ var img = lb.querySelector('img'), src = s.querySelector('img'); if (img && src){ img.src = src.getAttribute('src'); img.alt = src.alt; lb.classList.add('on'); } }
+  }
+  function tapFx(s, kind){ // "Ⅱ" ou "▶" no centro da tela do celular, some em ~400 ms (só opacity/transform)
+    var fx = s.querySelector('.phone-tap');
+    if (!fx){ fx = document.createElement('span'); fx.className = 'phone-tap'; fx.setAttribute('aria-hidden', 'true'); s.appendChild(fx); }
+    fx.textContent = kind === 'pause' ? 'Ⅱ' : '▶︎';
+    if (fx.animate) fx.animate([
+      {opacity: 0, transform: 'translate(-50%,-50%) scale(.8)'},
+      {opacity: 1, transform: 'translate(-50%,-50%) scale(1)', offset: .25},
+      {opacity: 0, transform: 'translate(-50%,-50%) scale(1.15)'}
+    ], {duration: 400, easing: 'ease-out'});
+  }
+  function label(){ // aria-label do slide ativo conforme o estado do vídeo
+    slides.forEach(function(s){
+      var v = s.querySelector('video');
+      if (s.classList.contains('is-active') && v && !v.error) s.setAttribute('aria-label', v.paused ? 'Reproduzir vídeo' : 'Pausar vídeo');
+      else s.removeAttribute('aria-label');
     });
+  }
+  function center(s){
+    var v = s.querySelector('video'), r = v && window.case1VideoToggle ? window.case1VideoToggle(v) : false;
+    if (!r){ zoom(s); return; }
+    tapFx(s, r);
+    if (r === 'pause') stopped = true;   // autoplay parado até o próximo toque, arraste ou seta
+    else hold();
+    label();
+  }
+  slides.forEach(function(s, i){
+    var v = s.querySelector('video');
+    if (v){ v.addEventListener('play', label); v.addEventListener('pause', label); }
+    s.addEventListener('click', function(){
+      if (moved || far) return;
+      if (offset(i) !== 0){ go(i); hold(); return; }
+      center(s);
+    });
+  });
+  stage.addEventListener('keydown', function(e){ // Enter/Espaço com foco no carrossel: alterna o vídeo do centro
+    if (e.target !== stage || (e.key !== 'Enter' && e.key !== ' ')) return;
+    e.preventDefault(); center(slides[active]);
   });
 
   // Autoplay suave: só com a seção na tela, aba visível e sem interação recente
-  var timer = null, visible = false, hovering = false, holdUntil = 0;
-  function hold(){ holdUntil = Date.now() + 9000; }
+  var timer = null, visible = false, hovering = false, holdUntil = 0, stopped = false;
+  function hold(){ stopped = false; holdUntil = Date.now() + 9000; } // qualquer interação libera o autoplay parado pela pausa
   var lastScroll = 0; addEventListener('scroll', function(){ lastScroll = Date.now(); }, {passive:true}); // não troca de slide com a página rolando
-  function tick(){ if (visible && !hovering && !document.hidden && !down && Date.now() > holdUntil && Date.now() - lastScroll > 600 && !stage.contains(document.activeElement)) step(1); }
+  function tick(){ if (visible && !stopped && !hovering && !document.hidden && !down && Date.now() > holdUntil && Date.now() - lastScroll > 600 && !stage.contains(document.activeElement)) step(1); }
   if (!reduce){
     timer = setInterval(tick, 4500);
     stage.addEventListener('mouseenter', function(){ hovering = true; });
@@ -886,7 +938,7 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px}
   }
 
   var rt; addEventListener('resize', function(){ clearTimeout(rt); rt = setTimeout(layout, 120); });
-  layout();
+  layout(); label();
 })();
 </script>
 <script id="case1-debug-js">
