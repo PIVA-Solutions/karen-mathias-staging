@@ -20,7 +20,7 @@ A base continua sendo a do portfólio original: mesma ordem de seções, mesmos 
 | Página montada como imagem fixa, texto pequeno no celular | Layout responsivo, que se reorganiza para celular, tablet e computador |
 | Sem menu: era preciso rolar tudo para achar um case | Menu fixo com atalhos para Sobre mim, Skills, Mutti e Cases |
 | Endereço `my.canva.site` com rodapé do Canva | Domínio próprio (`karenmathias.com.br`) |
-| Contato só no topo da página | Botão "Fale comigo" fixo no celular e chamada de contato no final |
+| Contato só no topo da página | Botão flutuante de WhatsApp em todas as telas e chamada de contato no final |
 | Texto em imagem, que o Google não lê | Texto real, legível por buscadores e por leitores de tela |
 
 ### Efeitos e interações
@@ -54,7 +54,14 @@ A base continua sendo a do portfólio original: mesma ordem de seções, mesmos 
 - **E-mail do topo copiável** com um toque.
 - O texto "BE_karenmathias_sm" do topo virou só "Behance".
 - **Case 1 em carrossel:** os 3 celulares viraram um carrossel com sobreposição. O celular que entra passa por cima do anterior e os vizinhos ficam parcialmente visíveis. Tem setas, arraste, teclado, autoplay suave e zoom no celular ativo.
+
+## Ajustes seguintes (novembro/2026)
+
+- **Case 1 com vídeos reais** nos celulares 1 e 2, em MP4 compatível com iPhone. O vídeo só toca no celular do centro e com a seção na tela; um toque nele pausa ou continua.
+- **Favicon** com o logo KM Social Media.
+- **WhatsApp** com o número oficial da Karen.
 - **Cases 2 e 3:** carrossel contínuo, como no Instagram, com as artes emendadas, arraste, setas e zoom para leitura.
+- **Correções (14/11):** "Sobre mim" voltou a ficar em duas colunas no computador (um erro de CSS desfazia o layout); a dica do Case 1 agora diz que o toque pausa o vídeo; as artes de Tipografia voltaram às versões originais, sem a ampliação por IA, que alterava letras.
 
 ## Roteiro de testes para a Karen
 
@@ -69,11 +76,11 @@ Abra o link no **celular** e, se puder, no **computador**, e anote o que achar:
 
 ## Pendências conhecidas
 
-- [ ] Trocar as imagens pelos arquivos originais em alta qualidade.
+- [ ] Trocar as imagens pelos arquivos originais em alta qualidade (Cases 2 e 3 já trocados; faltam Mutti, certificados, Case 1 e Tipografia). A ampliação por IA foi testada e reprovada: altera letras e logos.
 - [ ] Confirmar os códigos de cor da Mutti (no Canva, três cores aparecem com o mesmo código, `#F86C51`).
 - [ ] Links dos reels do Case 1 (no Canva: "clique no celular para acessar os vídeos").
 - [ ] Confirmar o endereço do Behance (`behance.net/karenmathias_sm`).
-- [x] Botão de WhatsApp (falta confirmar o número).
+- [x] Botão de WhatsApp com o número oficial.
 - [ ] Link do LinkedIn da Karen.
 - [ ] Publicar em produção no domínio `karenmathias.com.br`, sem `noindex`.
 
@@ -85,6 +92,7 @@ Abra o link no **celular** e, se puder, no **computador**, e anote o que achar:
 site/                      → tudo o que vai para o ar
   index.html               → a página inteira (HTML, CSS e JS)
   img/                     → fotos e artes
+  video/                   → vídeos do Case 1
 .github/workflows/
   deploy-pages.yml         → publica site/ no GitHub Pages a cada push na main
 ```
