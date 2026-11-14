@@ -54,6 +54,7 @@ A base continua sendo a do portfólio original: mesma ordem de seções, mesmos 
 - **E-mail do topo copiável** com um toque.
 - O texto "BE_karenmathias_sm" do topo virou só "Behance".
 - **Case 1 em carrossel:** os 3 celulares viraram um carrossel com sobreposição. O celular que entra passa por cima do anterior e os vizinhos ficam parcialmente visíveis. Tem setas, arraste, teclado, autoplay suave e zoom no celular ativo.
+- **Cases 2 e 3:** carrossel contínuo, como no Instagram, com as artes emendadas, arraste, setas e zoom para leitura.
 
 ## Roteiro de testes para a Karen
 
