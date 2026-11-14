@@ -314,25 +314,26 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px}
 /* Cases 2 e 3 · carrossel do Instagram com as artes em "polaroides" sobrepostas, como no post de referência da Karen:
    a arte atual fica grande, a próxima entra pequena POR CIMA no canto superior direito (cortada pela borda) e a anterior
    fica por baixo, só com uma ponta à esquerda. Posições calculadas no JS (variáveis --x/--y/--s/--r/--z/--o). */
-.pano{grid-column:1/-1;min-width:0;justify-self:center;width:min(100%,470px)} /* largura de um post do Instagram no computador */
-.pano-frame{position:relative;overflow:hidden;border:1px solid var(--line);border-radius:8px;box-shadow:0 30px 60px -24px rgba(0,0,0,.7);background:radial-gradient(120% 90% at 30% 20%,#1d1830 0%,#0c0b12 70%)}
-.pano-track{position:relative;aspect-ratio:4/5;touch-action:pan-y;user-select:none;-webkit-user-select:none;cursor:grab;outline:none}
+.pano{grid-column:1/-1;min-width:0;--pw:clamp(210px,23vw,270px)} /* mesmo --pw do Case 1: os três cases têm o mesmo palco */
+@media (max-width:640px){.pano{--pw:min(62vw,250px)}}
+.pano-frame{position:relative;overflow:hidden;padding-top:10px}
+.pano-frame::before{content:"";position:absolute;left:50%;top:46%;width:min(620px,90%);aspect-ratio:1.5;transform:translate(-50%,-50%);background:radial-gradient(closest-side,rgba(142,92,255,.38),transparent);pointer-events:none}
+.pano-track{position:relative;height:calc(var(--pw) * 2.006 + 48px);touch-action:pan-y;user-select:none;-webkit-user-select:none;cursor:grab;outline:none}
 .pano-track.dragging{cursor:grabbing}
 .pano-track:focus-visible{box-shadow:inset 0 0 0 2px var(--lilac)}
-.pano-slide{position:absolute;left:0;top:0;width:80%;margin:0;padding:1.6%;background:#fff;box-shadow:0 12px 30px rgba(0,0,0,.55);transform-origin:0 0;
+.pano-slide{position:absolute;left:0;top:0;width:var(--cw,60%);margin:0;padding:var(--pad,7px);background:#fff;box-shadow:0 12px 30px rgba(0,0,0,.55);transform-origin:0 0;
   transform:translate(var(--x,0px),var(--y,0px)) rotate(var(--r,0deg)) scale(var(--s,1));z-index:var(--z,1);opacity:var(--o,0);
   transition:transform .6s cubic-bezier(.22,1,.36,1),opacity .4s ease;will-change:transform;cursor:pointer}
 .pano-slide.is-active{cursor:zoom-in}
 .pano-slide img{display:block;width:100%;height:auto;pointer-events:none;-webkit-user-drag:none}
 .pano-track.dragging .pano-slide{transition:none}
-.pano-count{position:absolute;top:14px;right:14px;z-index:40;padding:4px 9px;border-radius:999px;background:rgba(26,26,26,.8);color:#fff;font:600 .75rem/1.3 var(--ui);font-variant-numeric:tabular-nums;pointer-events:none}
-.pano-arrow{position:absolute;top:50%;z-index:40;width:30px;height:30px;margin-top:-15px;padding:0;border:0;border-radius:50%;background:rgba(255,255,255,.82);box-shadow:0 0 5px rgba(0,0,0,.25);cursor:pointer;transition:background .2s}
+.pano-count{position:absolute;top:12px;right:12px;z-index:40;padding:4px 9px;border-radius:999px;background:rgba(26,26,26,.8);color:#fff;font:600 .75rem/1.3 var(--ui);font-variant-numeric:tabular-nums;pointer-events:none}
+.pano-arrow{position:absolute;left:var(--ax,12px);top:var(--ay,50%);z-index:40;width:30px;height:30px;margin-top:-15px;transition:background .2s,left .6s cubic-bezier(.22,1,.36,1),top .6s cubic-bezier(.22,1,.36,1);padding:0;border:0;border-radius:50%;background:rgba(255,255,255,.82);box-shadow:0 0 5px rgba(0,0,0,.25);cursor:pointer;transition:background .2s}
 .pano-arrow:hover{background:#fff}
-.pano-arrow.prev{left:12px}.pano-arrow.next{right:12px}
 .pano-arrow::before{content:"";position:absolute;left:50%;top:50%;width:8px;height:8px;border:solid #262626;border-width:0 2px 2px 0;transform:translate(-65%,-50%) rotate(-45deg)}
 .pano-arrow.prev::before{transform:translate(-35%,-50%) rotate(135deg)}
 @media (hover:none){.pano-arrow{display:none}} /* no celular, como no app: só o arraste */
-.pano-dots{display:flex;justify-content:center;gap:4px;margin-top:14px}
+.pano-dots{display:flex;justify-content:center;gap:4px;margin-top:6px}
 .pano-dots button{width:6px;height:6px;padding:0;border:0;border-radius:50%;background:rgba(255,255,255,.35);cursor:pointer;transition:background .2s}
 .pano-dots button[aria-current="true"]{background:#0095f6}
 @media (prefers-reduced-motion:reduce){.pano-slide{transition:none}}
@@ -1011,20 +1012,33 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px}
     var prev = pano.querySelector('.pano-arrow.prev'), next = pano.querySelector('.pano-arrow.next'), active = 0;
     if (!N) return;
 
-    // Posição de cada arte conforme a distância d até a atual (frações da largura W e da altura H do quadro)
-    function place(d){
-      if (d === 0)  return {x:.05, y:.11, s:1,   r:-1.5, z:20, o:1};
-      if (d === 1)  return {x:.68, y:.03, s:.58, r:3,   z:30, o:1};  // próxima: pequena e POR CIMA, cortada à direita
-      if (d === -1) return {x:-.68, y:.07, s:.9, r:-3,   z:10, o:1};  // anterior: por baixo, só a ponta à esquerda
-      return d > 0 ? {x:1.05, y:.035, s:.6, r:3, z:5, o:0} : {x:-.95, y:.08, s:.9, r:-3, z:5, o:0};
+    // Tamanho da polaroide pela altura do palco (mesma altura do Case 1), limitado a 78% da largura no celular
+    var ar = (+slides[0].querySelector('img').getAttribute('width')) / (+slides[0].querySelector('img').getAttribute('height'));
+    function geo(){
+      var W = stage.clientWidth, H = stage.clientHeight, pad = Math.round(Math.max(5, Math.min(8, W * .014)));
+      var ch = H * .86, cw = (ch - 2 * pad) * ar + 2 * pad;
+      if (cw > W * .78){ cw = W * .78; ch = (cw - 2 * pad) / ar + 2 * pad; }
+      return {W: W, H: H, cw: Math.round(cw), ch: ch, pad: pad};
+    }
+    // Posição de cada arte conforme a distância d até a atual: a atual no centro, a próxima pequena POR CIMA à direita
+    // (no celular, cortada pela borda), a anterior por baixo à esquerda, só parcialmente visível
+    function place(d, q){
+      var cx = q.W / 2, ax = cx - q.cw / 2, ay = (q.H - q.ch) / 2;
+      if (d === 0)  return {x: ax, y: ay, s: 1, r: -1.5, z: 20, o: 1};
+      if (d === 1)  return {x: cx + q.cw * .38, y: q.H * .03, s: .6, r: 3, z: 30, o: 1};
+      if (d === -1) return {x: cx - q.cw * .5 - q.cw * .85 * .75, y: q.H * .08, s: .85, r: -3, z: 10, o: 1};
+      return d > 0 ? {x: cx + q.cw * .38 + q.cw * .36, y: q.H * .03, s: .45, r: 3, z: 5, o: 0}
+                   : {x: cx - q.cw * .5 - q.cw * 1.4, y: q.H * .08, s: .85, r: -3, z: 5, o: 0};
     }
     function layout(drag){
-      var W = stage.clientWidth, H = stage.clientHeight, f = drag ? Math.max(-1, Math.min(1, -drag / W)) : 0;
+      var q = geo(), f = drag ? Math.max(-1, Math.min(1, -drag / q.W)) : 0;
       slides.forEach(function(s, i){
-        var d = i - active, a = place(d), b = place(d - (f > 0 ? 1 : -1)), t = Math.abs(f), p = {};
+        var d = i - active, a = place(d, q), b = place(d - (f > 0 ? 1 : -1), q), t = Math.abs(f), p = {};
         ['x','y','s','r','o'].forEach(function(k){ p[k] = a[k] + (b[k] - a[k]) * t; });  // no arraste, interpola até a posição vizinha
-        s.style.setProperty('--x', (p.x * W).toFixed(1) + 'px');
-        s.style.setProperty('--y', (p.y * H).toFixed(1) + 'px');
+        s.style.setProperty('--cw', q.cw + 'px');
+        s.style.setProperty('--pad', q.pad + 'px');
+        s.style.setProperty('--x', p.x.toFixed(1) + 'px');
+        s.style.setProperty('--y', p.y.toFixed(1) + 'px');
         s.style.setProperty('--s', p.s.toFixed(3));
         s.style.setProperty('--r', p.r.toFixed(2) + 'deg');
         s.style.setProperty('--o', p.o.toFixed(2));
@@ -1032,11 +1046,15 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px}
         s.classList.toggle('is-active', d === 0);
         if (Math.abs(d) <= 1) s.removeAttribute('aria-hidden'); else s.setAttribute('aria-hidden', 'true');
       });
+      // setas sobre as bordas da arte atual, na altura do meio (como no Instagram)
+      var c = place(0, q), my = c.y + q.ch / 2 + 10;
+      prev.style.setProperty('--ax', (c.x + 10).toFixed(1) + 'px'); prev.style.setProperty('--ay', my.toFixed(1) + 'px');
+      next.style.setProperty('--ax', (c.x + q.cw - 40).toFixed(1) + 'px'); next.style.setProperty('--ay', my.toFixed(1) + 'px');
     }
     function go(i){
       active = Math.max(0, Math.min(N - 1, i)); layout(0);
       Array.prototype.forEach.call(dots.children, function(b, j){ b.setAttribute('aria-current', j === active ? 'true' : 'false'); });
-      count.textContent = (active + 1) + '/' + N;
+      count.textContent = (active + 1) + '/' + N; slides[active].appendChild(count);
       prev.hidden = active === 0; next.hidden = active === N - 1;
     }
 
@@ -1079,8 +1097,7 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px}
       if (!gs.h) return;
       suppress = true;                                   // o click depois de um arraste não abre o zoom nem avança
       stage.classList.remove('dragging');
-      var W = stage.clientWidth;
-      if (Math.abs(gs.dx) > W * .15) go(active + (gs.dx < 0 ? 1 : -1)); else go(active);
+      if (Math.abs(gs.dx) > stage.clientWidth * .15) go(active + (gs.dx < 0 ? 1 : -1)); else go(active);
     }
     stage.addEventListener('pointerup', end);
     stage.addEventListener('pointercancel', end);
