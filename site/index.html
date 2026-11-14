@@ -229,7 +229,7 @@ section{padding-block:clamp(70px,10vw,120px);position:relative;overflow:hidden;o
 .case-info h3 span{color:var(--lilac);font-weight:400}
 .case-info ul{margin:0;padding-left:20px;display:grid;gap:3px;color:var(--muted)}
 .case-info li::marker{color:var(--lilac)}
-.case .zoom{grid-column:1/-1;justify-self:center;width:min(100%,720px);margin-top:18px;border:1px solid var(--line);box-shadow:0 30px 60px -24px rgba(0,0,0,.7)} /* centralizado e menor, na escala dos palcos dos cases */
+.case .zoom{grid-column:1/-1;justify-self:center;width:min(100%,860px);margin-top:18px;border:1px solid var(--line);box-shadow:0 30px 60px -24px rgba(0,0,0,.7)} /* centralizado e menor, na escala dos palcos dos cases */
 @media (max-width:640px){.case{grid-template-columns:1fr}}
 
 /* OBRIGADA */
@@ -279,7 +279,7 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px}
 </style>
 <style id="case1-carousel-css">
 /* Case 1 · carrossel de celulares sobrepostos */
-.phone-stage{grid-column:1/-1;position:relative;overflow:hidden;padding-top:10px;--pw:clamp(210px,23vw,270px);outline:none}
+.phone-stage{grid-column:1/-1;position:relative;overflow:hidden;padding-top:10px;--pw:clamp(250px,28vw,320px);outline:none}
 .phone-stage:focus-visible{outline:2px solid var(--lilac);outline-offset:6px;border-radius:24px}
 .phone-stage::before{content:"";position:absolute;left:50%;top:46%;width:min(620px,90%);aspect-ratio:1.5;transform:translate(-50%,-50%);background:radial-gradient(closest-side,rgba(142,92,255,.38),transparent);pointer-events:none}
 .phone-track{position:relative;height:calc(var(--pw) * 2.006 + 48px);touch-action:pan-y;user-select:none;-webkit-user-select:none;cursor:grab}
@@ -303,7 +303,7 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px}
 .phone-tap[data-kind="pause"]::before{content:"";width:34%;height:38%;background:linear-gradient(90deg,#fff 0 34%,transparent 34% 66%,#fff 66%)}
 .phone-tap[data-kind="play"]::before{content:"";width:34%;height:40%;margin-left:8%;background:#fff;clip-path:polygon(0 0,100% 50%,0 100%)}
 .phone-hint{text-align:center;font:italic .9rem var(--serif);color:var(--muted);margin-top:10px}
-@media (max-width:640px){.phone-stage{--pw:min(62vw,250px)}}
+@media (max-width:640px){.phone-stage{--pw:min(70vw,285px)}}
 @media (prefers-reduced-motion:reduce){.phone-slide,.phone-slide::after{transition-duration:.01s!important}}
 </style>
 <style id="case1-video-css">
@@ -314,8 +314,8 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px}
 /* Cases 2 e 3 · carrossel do Instagram com as artes em "polaroides" sobrepostas, como no post de referência da Karen:
    a arte atual fica grande, a próxima entra pequena POR CIMA no canto superior direito (cortada pela borda) e a anterior
    fica por baixo, só com uma ponta à esquerda. Posições calculadas no JS (variáveis --x/--y/--s/--r/--z/--o). */
-.pano{grid-column:1/-1;min-width:0;--pw:clamp(210px,23vw,270px)} /* mesmo --pw do Case 1: os três cases têm o mesmo palco */
-@media (max-width:640px){.pano{--pw:min(62vw,250px)}}
+.pano{grid-column:1/-1;min-width:0;--pw:clamp(250px,28vw,320px)} /* mesmo --pw do Case 1: os três cases têm o mesmo palco */
+@media (max-width:640px){.pano{--pw:min(70vw,285px)}}
 .pano-frame{position:relative;overflow:hidden;padding-top:10px}
 .pano-frame::before{content:"";position:absolute;left:50%;top:46%;width:min(620px,90%);aspect-ratio:1.5;transform:translate(-50%,-50%);background:radial-gradient(closest-side,rgba(142,92,255,.38),transparent);pointer-events:none}
 .pano-track{position:relative;height:calc(var(--pw) * 2.006 + 48px);touch-action:pan-y;user-select:none;-webkit-user-select:none;cursor:grab;outline:none}
@@ -1012,12 +1012,12 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px}
     var prev = pano.querySelector('.pano-arrow.prev'), next = pano.querySelector('.pano-arrow.next'), active = 0;
     if (!N) return;
 
-    // Tamanho da polaroide pela altura do palco (mesma altura do Case 1), limitado a 78% da largura no celular
+    // Tamanho da polaroide pela altura do palco (mesma altura do Case 1), limitado a 84% da largura no celular
     var ar = (+slides[0].querySelector('img').getAttribute('width')) / (+slides[0].querySelector('img').getAttribute('height'));
     function geo(){
       var W = stage.clientWidth, H = stage.clientHeight, pad = Math.round(Math.max(5, Math.min(8, W * .014)));
       var ch = H * .86, cw = (ch - 2 * pad) * ar + 2 * pad;
-      if (cw > W * .78){ cw = W * .78; ch = (cw - 2 * pad) / ar + 2 * pad; }
+      if (cw > W * .84){ cw = W * .84; ch = (cw - 2 * pad) / ar + 2 * pad; }
       return {W: W, H: H, cw: Math.round(cw), ch: ch, pad: pad};
     }
     // Posição de cada arte conforme a distância d até a atual: a atual no centro, a próxima pequena POR CIMA à direita
