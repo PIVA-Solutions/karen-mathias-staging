@@ -311,6 +311,23 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px}
 /* Case 1 · vídeo encaixado na tela do celular: retângulo (27,128)–(528,1021) sobre a arte de 558×1119 */
 .phone-slide .phone-vid{position:absolute;left:4.8387%;top:11.4388%;width:89.7849%;height:79.8034%;border-radius:1.1976%/.6719%;object-fit:cover;display:block;pointer-events:none;background:transparent}
 </style>
+<style id="cases-pano-css">
+/* Cases 2 e 3 · carrossel contínuo (panorâmico): as artes ficam coladas, sem fresta, para os elementos atravessarem a divisa como no Instagram. Moldura só no contêiner. */
+.pano{grid-column:1/-1;min-width:0;--sw:clamp(260px,30vw,380px)} /* min-width:0: sem isso o item do grid estica até a soma das artes e a trilha não rola */
+@media (max-width:640px){.pano{--sw:84vw}}
+/* largura inteira em px onde round() existe: com largura fracionária a divisa cai no meio do pixel e aparece um fio escuro entre as artes */
+@supports (width:round(down,1px,1px)){
+  .pano{--sw:round(down,clamp(260px,30vw,380px),1px)}
+  @media (max-width:640px){.pano{--sw:round(down,84vw,1px)}}
+}
+.pano-track{display:flex;gap:0;padding:0;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;overscroll-behavior-x:contain;scrollbar-width:none;border:1px solid var(--line);border-radius:10px;box-shadow:0 30px 60px -24px rgba(0,0,0,.7);cursor:grab;touch-action:pan-x pan-y;-webkit-overflow-scrolling:touch}
+.pano-track::-webkit-scrollbar{display:none}
+.pano-track.dragging{cursor:grabbing}
+.pano-track:focus-visible{outline:2px solid var(--lilac);outline-offset:4px}
+.pano-slide{flex:0 0 var(--sw);margin:0;padding:0;scroll-snap-align:start}
+.pano-slide img{display:block;width:100%;height:auto;-webkit-user-drag:none;user-select:none}
+.pano-count{font:600 .8rem var(--ui);color:var(--muted);font-variant-numeric:tabular-nums;min-width:3.2em;text-align:center}
+</style>
 <script id="perf-keys-js">
 /* Diagnóstico de performance: chaves ?perf=a,b (noblur, stars1x, nostars, noparallax, lazyimg, noreveal, noloop, all).
    Sem o parâmetro, window.__perf fica vazio e nada no site muda. */
@@ -549,13 +566,45 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px}
         <span class="num">Case 2</span>
         <div class="case-info"><h3>Graziele <span>| Psicóloga</span></h3>
           <ul><li>Reestruturação e reativação do perfil</li><li>Posicionamento e estratégia de comunicação</li><li>Desenvolvimento de identidade visual</li><li>Criação de conteúdo autoral alinhado à atuação profissional</li></ul></div>
-        <button class="zoom" data-src="img/case2.jpg" aria-label="Ampliar case 2"><img src="img/case2.jpg" width="570" height="293" loading="lazy" decoding="async" alt="Capa do projeto de social media da psicóloga Graziele"></button>
+        <div class="pano" id="case2Pano" role="region" aria-roledescription="carrossel" aria-label="Carrossel do Case 2, Graziele">
+          <div class="pano-track" tabindex="0">
+            <figure class="pano-slide"><img src="img/case2_1.webp" width="1024" height="1280" loading="lazy" decoding="async" alt="Capa: Sua autoestima é sua ou dos outros? Mulher relaxando na banheira" draggable="false"></figure>
+            <figure class="pano-slide"><img src="img/case2_2.webp" width="1024" height="1280" loading="lazy" decoding="async" alt="Autoestima não vem do que dizem sobre você, mas do que você acredita sobre si mesma" draggable="false"></figure>
+            <figure class="pano-slide"><img src="img/case2_3.webp" width="1024" height="1280" loading="lazy" decoding="async" alt="Se você só se sente suficiente quando recebe validação externa, talvez seja hora de fortalecer sua relação consigo mesma" draggable="false"></figure>
+            <figure class="pano-slide"><img src="img/case2_4.webp" width="1024" height="1280" loading="lazy" decoding="async" alt="E se você se olhasse com o mesmo carinho, paciência e amor que dedica a quem ama?" draggable="false"></figure>
+            <figure class="pano-slide"><img src="img/case2_5.webp" width="1024" height="1280" loading="lazy" decoding="async" alt="Comece com pequenos gestos: o jeito que você se trata importa" draggable="false"></figure>
+            <figure class="pano-slide"><img src="img/case2_6.webp" width="1024" height="1280" loading="lazy" decoding="async" alt="Vamos conversar? Sua autoestima vem de dentro ou ainda depende dos outros?" draggable="false"></figure>
+          </div>
+          <div class="phone-ctrl">
+            <button type="button" class="phone-nav" data-dir="-1" aria-label="Arte anterior">←</button>
+            <div class="phone-dots" role="group" aria-label="Escolher arte"></div>
+            <span class="pano-count">1 / 6</span>
+            <button type="button" class="phone-nav" data-dir="1" aria-label="Próxima arte">→</button>
+          </div>
+          <p class="phone-hint">Arraste para o lado, como no Instagram · toque para ampliar</p>
+        </div>
       </article>
       <article class="case reveal">
         <span class="num">Case 3</span>
         <div class="case-info"><h3>Luísa <span>| Psicóloga</span></h3>
           <ul><li>Profissionalização e reestruturação do perfil</li><li>Identidade visual própria</li><li>Planejamento editorial</li><li>Conteúdo autoral estratégico</li><li>Roteiros e edição de vídeos</li><li>Foco em alcance, autoridade e engajamento</li></ul></div>
-        <button class="zoom" data-src="img/case3.jpg" aria-label="Ampliar case 3"><img src="img/case3.jpg" width="1100" height="339" loading="lazy" decoding="async" alt="Posts sobre saúde mental para a psicóloga Luísa"></button>
+        <div class="pano" id="case3Pano" role="region" aria-roledescription="carrossel" aria-label="Carrossel do Case 3, Luísa">
+          <div class="pano-track" tabindex="0">
+            <figure class="pano-slide"><img src="img/case3_1.webp" width="1080" height="1440" loading="lazy" decoding="async" alt="Capa: Como é a psicoterapia comigo? Luísa Gomes, psicóloga clínica" draggable="false"></figure>
+            <figure class="pano-slide"><img src="img/case3_2.webp" width="1080" height="1440" loading="lazy" decoding="async" alt="Comigo você encontrará um espaço seguro de escuta, dedicação, presença e acolhimento" draggable="false"></figure>
+            <figure class="pano-slide"><img src="img/case3_3.webp" width="1080" height="1440" loading="lazy" decoding="async" alt="Aqui você pode ser você mesmo(a), com sua história, seu silêncio e suas emoções" draggable="false"></figure>
+            <figure class="pano-slide"><img src="img/case3_4.webp" width="1080" height="1440" loading="lazy" decoding="async" alt="A psicanálise é um espaço de escuta atenta para compreender e ressignificar dores emocionais" draggable="false"></figure>
+            <figure class="pano-slide"><img src="img/case3_5.webp" width="1080" height="1440" loading="lazy" decoding="async" alt="Atendimento online ou presencial, num espaço seguro, com o respaldo de uma profissional" draggable="false"></figure>
+            <figure class="pano-slide"><img src="img/case3_6.webp" width="1080" height="1440" loading="lazy" decoding="async" alt="Fechamento: me chame no WhatsApp e agende um encontro" draggable="false"></figure>
+          </div>
+          <div class="phone-ctrl">
+            <button type="button" class="phone-nav" data-dir="-1" aria-label="Arte anterior">←</button>
+            <div class="phone-dots" role="group" aria-label="Escolher arte"></div>
+            <span class="pano-count">1 / 6</span>
+            <button type="button" class="phone-nav" data-dir="1" aria-label="Próxima arte">→</button>
+          </div>
+          <p class="phone-hint">Arraste para o lado, como no Instagram · toque para ampliar</p>
+        </div>
       </article>
     </div>
   </section>
@@ -942,6 +991,104 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px}
 
   var rt; addEventListener('resize', function(){ clearTimeout(rt); rt = setTimeout(layout, 120); });
   layout(); label();
+})();
+</script>
+<script id="cases-pano-js">
+/* Cases 2 e 3 · carrossel contínuo. Cada .pano tem estado próprio. Toque: rolagem 100% nativa (nada de preventDefault nem
+   scrollLeft via JS). Mouse: arraste manual com o snap desligado durante o gesto. Sem autoplay e sem biblioteca. */
+(function(){
+  var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  Array.prototype.forEach.call(document.querySelectorAll('.pano'), function(pano){
+    var track = pano.querySelector('.pano-track');
+    var slides = Array.prototype.slice.call(track.querySelectorAll('.pano-slide'));
+    var N = slides.length, dots = pano.querySelector('.phone-dots'), count = pano.querySelector('.pano-count'), active = -1;
+    if (!N) return;
+
+    function sw(){ return slides[0].getBoundingClientRect().width || 1; }
+    function maxLeft(){ return track.scrollWidth - track.clientWidth; }
+    // índice = Math.round(scrollLeft / largura do slide); no fim da trilha (no computador cabem várias artes) conta como a última
+    function current(){ var m = maxLeft(); return (m > 0 && track.scrollLeft >= m - 2) ? N - 1 : Math.max(0, Math.min(N - 1, Math.round(track.scrollLeft / sw()))); }
+    function go(i){ i = Math.max(0, Math.min(N - 1, i)); track.scrollTo({left: i * sw(), behavior: reduce ? 'auto' : 'smooth'}); }
+    // Setas/teclado andam entre as posições que a trilha alcança de verdade (no computador as últimas artes caem todas no fim)
+    function step(dir){
+      var w = sw(), m = maxLeft(), sl = track.scrollLeft, stops = [];
+      for (var i = 0; i < N; i++) stops.push(Math.min(i * w, m));
+      var t = dir > 0 ? stops.filter(function(p){ return p > sl + 2; })[0] : stops.filter(function(p){ return p < sl - 2; }).pop();
+      if (t !== undefined) track.scrollTo({left: t, behavior: reduce ? 'auto' : 'smooth'});
+    }
+
+    // Pontinhos e contador: só mexem no DOM quando o índice muda
+    for (var k = 0; k < N; k++) (function(k){
+      var b = document.createElement('button'); b.type = 'button'; b.setAttribute('aria-label', 'Arte ' + (k + 1));
+      b.addEventListener('click', function(){ go(k); });
+      dots.appendChild(b);
+    })(k);
+    function update(){
+      var i = current(); if (i === active) return; active = i;
+      Array.prototype.forEach.call(dots.children, function(b, j){ b.setAttribute('aria-current', j === i ? 'true' : 'false'); });
+      count.textContent = (i + 1) + ' / ' + N;
+    }
+    var raf = 0;
+    track.addEventListener('scroll', function(){ if (!raf) raf = requestAnimationFrame(function(){ raf = 0; update(); }); }, {passive: true});
+
+    // Setas e teclado
+    pano.querySelectorAll('.phone-nav').forEach(function(b){ b.addEventListener('click', function(){ step(+b.getAttribute('data-dir')); }); });
+    track.addEventListener('keydown', function(e){
+      if (e.key === 'ArrowRight'){ e.preventDefault(); step(1); }
+      else if (e.key === 'ArrowLeft'){ e.preventDefault(); step(-1); }
+    });
+
+    // Gesto: down/up registram posição e scrollLeft (todos os tipos de ponteiro); só o mouse arrasta via JS
+    var g = null, tap = null, suppress = false;
+    track.addEventListener('pointerdown', function(e){
+      if (e.pointerType === 'mouse' && e.button !== 0) return;
+      tap = null; suppress = false;                     // um arraste que terminou sem click não pode engolir este gesto
+      g = {id: e.pointerId, mouse: e.pointerType === 'mouse', x: e.clientX, y: e.clientY, sl: track.scrollLeft, moved: false, slide: e.target.closest('.pano-slide')};
+      if (g.mouse){ try { track.setPointerCapture(e.pointerId); } catch(err){} }
+    });
+    track.addEventListener('pointermove', function(e){
+      if (!g || !g.mouse || e.pointerId !== g.id) return;
+      var dx = e.clientX - g.x;
+      if (!g.moved && Math.abs(dx) > 6){ g.moved = true; track.style.scrollSnapType = 'none'; track.classList.add('dragging'); }
+      if (g.moved) track.scrollLeft = g.sl - dx;
+    });
+    // Fim do gesto, idempotente: pointerup, pointercancel e lostpointercapture podem chegar juntos; só o primeiro age
+    var settle = 0;
+    function end(e){
+      if (!g || e.pointerId !== g.id) return;
+      var gs = g; g = null;
+      var dist = Math.hypot(e.clientX - gs.x, e.clientY - gs.y);
+      tap = (e.type === 'pointerup' && !gs.moved && dist < 10 && Math.abs(track.scrollLeft - gs.sl) < 1) ? gs.slide : null;
+      if (gs.mouse && track.hasPointerCapture && track.hasPointerCapture(gs.id)){ try { track.releasePointerCapture(gs.id); } catch(err){} }
+      if (!gs.moved) return;
+      suppress = true;                                  // o click que vem depois de um arraste não abre o zoom
+      track.classList.remove('dragging');
+      var token = ++settle, target = Math.max(0, Math.min(N - 1, Math.round(track.scrollLeft / sw()))) * sw();
+      function snapBack(){ if (token !== settle) return; settle++; track.style.scrollSnapType = ''; }
+      if (reduce || Math.abs(track.scrollLeft - target) < 1){ track.scrollLeft = target; snapBack(); return; }
+      track.scrollTo({left: target, behavior: 'smooth'});
+      // religa o snap só quando a rolagem suave termina (senão ele pula para o ponto na hora)
+      if ('onscrollend' in window) track.addEventListener('scrollend', snapBack, {once: true});
+      setTimeout(snapBack, 700);
+    }
+    track.addEventListener('pointerup', end);
+    track.addEventListener('pointercancel', end);
+    track.addEventListener('lostpointercapture', end);
+
+    // Clique: depois de arraste, engole o click (captura); toque/clique parado abre a arte no zoom do site
+    track.addEventListener('click', function(e){
+      if (suppress){ suppress = false; tap = null; e.stopPropagation(); e.preventDefault(); }
+    }, true);
+    track.addEventListener('click', function(){
+      var s = tap; tap = null; if (!s) return;
+      var lb = document.getElementById('lb'), img = lb && lb.querySelector('img'), src = s.querySelector('img');
+      if (!img || !src) return;
+      img.src = src.getAttribute('src'); img.alt = src.alt; lb.classList.add('on');
+    });
+
+    var rt; addEventListener('resize', function(){ clearTimeout(rt); rt = setTimeout(function(){ active = -1; update(); }, 120); });
+    update();
+  });
 })();
 </script>
 <script id="case1-debug-js">
