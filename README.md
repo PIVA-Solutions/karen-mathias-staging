@@ -60,7 +60,7 @@ A base continua sendo a do portfólio original: mesma ordem de seções, mesmos 
 - **Case 1 com vídeos reais** nos celulares 1 e 2, em MP4 compatível com iPhone. O vídeo só toca no celular do centro e com a seção na tela; um toque nele pausa ou continua.
 - **Favicon** com o logo KM Social Media.
 - **WhatsApp** com o número oficial da Karen.
-- **Cases 2 e 3:** carrossel contínuo, como no Instagram, com as artes emendadas, arraste, setas e zoom para leitura.
+- **Cases 2 e 3:** carrossel igual ao do Instagram: uma arte por vez no tamanho de um post, arraste de uma arte por vez, contador, pontinhos, setas no computador e zoom para leitura. As artes são emendadas, então a continuidade aparece ao arrastar.
 - **Correções (14/11):** "Sobre mim" voltou a ficar em duas colunas no computador (um erro de CSS desfazia o layout); a dica do Case 1 agora diz que o toque pausa o vídeo; as artes de Tipografia voltaram às versões originais, sem a ampliação por IA, que alterava letras.
 
 ## Roteiro de testes para a Karen
