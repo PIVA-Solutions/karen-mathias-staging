@@ -1101,7 +1101,7 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px}
     }
     stage.addEventListener('pointerup', end);
     stage.addEventListener('pointercancel', end);
-    stage.addEventListener('lostpointercapture', end);
+    stage.addEventListener('lostpointercapture', function(e){ if (e.target === stage) end(e); });
 
     // Clique: depois de arraste, engole; na próxima/anterior, navega; na atual, abre o zoom do site
     stage.addEventListener('click', function(e){
