@@ -310,6 +310,12 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px}
 /* Case 1 · vídeo encaixado na tela do celular: retângulo (27,128)–(528,1021) sobre a arte de 558×1119 */
 .phone-slide .phone-vid{position:absolute;left:4.8387%;top:11.4388%;width:89.7849%;height:79.8034%;border-radius:1.1976%/.6719%;object-fit:cover;display:block;pointer-events:none;background:transparent}
 </style>
+<style id="cert-grid-css">
+/* Certificados: um botão de zoom por certificado, inteiros (sem corte) */
+.cert-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;min-width:0}
+.cert-grid .zoom{border-radius:10px}
+.cert-grid img{width:100%;height:auto;border-radius:10px}
+</style>
 <style id="cases-pano-css">
 /* Cases 2 e 3 · carrossel do Instagram com as artes em "polaroides" sobrepostas, como no post de referência da Karen:
    a arte atual fica grande, a próxima entra pequena POR CIMA no canto superior direito (cortada pela borda) e a anterior
@@ -435,7 +441,12 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px}
       <div class="cert-copy reveal">
         <h2 class="retro">Certificados <span class="sparkle">✦</span></h2>
         <p class="lead">Sou formada em Administração, Marketing Digital e Vendas, tenho também certificações na área de Social Media. Estou sempre ampliando meu olhar sobre os conteúdos nas redes sociais e me permitindo enxergá-las além da criação e estratégia de conteúdo.</p>
-        <button class="zoom" data-src="img/certificados.jpg" aria-label="Ampliar certificados"><img src="img/certificados.jpg" width="570" height="443" loading="lazy" decoding="async" alt="Certificados da Universidade Paulista, Anhembi Morumbi, UniAmérica e Social Media na Prática"></button>
+        <div class="cert-grid">
+          <button class="zoom" data-src="img/cert_unip.webp" aria-label="Ampliar diploma da Universidade Paulista"><img src="img/cert_unip.webp" width="1200" height="851" loading="lazy" decoding="async" alt="Diploma de Bacharela em Administração, Universidade Paulista"></button>
+          <button class="zoom" data-src="img/cert_anhembi.webp" aria-label="Ampliar certificado da Anhembi Morumbi"><img src="img/cert_anhembi.webp" width="1200" height="851" loading="lazy" decoding="async" alt="Certificado de Especialização em Negócios em Mídias Digitais, Universidade Anhembi Morumbi"></button>
+          <button class="zoom" data-src="img/cert_uniamerica.webp" aria-label="Ampliar certificado da UniAmérica"><img src="img/cert_uniamerica.webp" width="1200" height="851" loading="lazy" decoding="async" alt="Certificado de MBA em Marketing Digital e Vendas, UniAmérica Descomplica"></button>
+          <button class="zoom" data-src="img/cert_social_media.webp" aria-label="Ampliar certificado do Social Media de Elite"><img src="img/cert_social_media.webp" width="1200" height="851" loading="lazy" decoding="async" alt="Certificado do curso Social Media na Prática, Social Media de Elite"></button>
+        </div>
       </div>
     </div>
   </section>
