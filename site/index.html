@@ -561,7 +561,7 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px}
           <div class="phone-track">
             <figure class="phone-slide"><img src="img/case1_phone1.webp" width="1116" height="2238" loading="lazy" decoding="async" alt="Vídeo com o planeta Terra e o número 840 mil" draggable="false"></figure>
             <figure class="phone-slide"><img src="img/case1_phone2.webp" width="1116" height="2238" loading="lazy" decoding="async" alt="Vídeo em aeroporto, Mayara conduzindo a câmera pela mão" draggable="false"></figure>
-            <figure class="phone-slide"><img src="img/case1_phone3.webp" width="558" height="1119" loading="lazy" decoding="async" alt="Mayara falando sobre a NR-1" draggable="false"></figure>
+            <figure class="phone-slide"><img src="img/case1_phone3.webp" width="1116" height="2238" loading="lazy" decoding="async" alt="Vídeo da Mayara sentada numa poltrona, falando para a câmera" draggable="false"></figure>
           </div>
           <div class="phone-ctrl">
             <button type="button" class="phone-nav" data-dir="-1" aria-label="Vídeo anterior">←</button>
@@ -765,7 +765,7 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px}
   var stage = document.getElementById('phoneStage');
   if (!stage || !('IntersectionObserver' in window)) return;
   if (matchMedia('(prefers-reduced-motion: reduce)').matches) return; // sem vídeo: fica a imagem do celular (= pôster)
-  var MAP = { 'img/case1_phone1.webp': 'case1_phone1', 'img/case1_phone2.webp': 'case1_phone2' };
+  var MAP = { 'img/case1_phone1.webp': 'case1_phone1', 'img/case1_phone2.webp': 'case1_phone2', 'img/case1_phone3.webp': 'case1_phone3' };
   var dbg = window.__case1VideoDbg = { err: '' }; // lido pelo painel ?debug=1
   stage.querySelectorAll('.phone-slide > img').forEach(function(img){
     var name = MAP[img.getAttribute('src')]; if (!name) return;
