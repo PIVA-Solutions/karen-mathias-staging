@@ -310,6 +310,19 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px}
 /* Case 1 · vídeo encaixado na tela do celular: retângulo (27,128)–(528,1021) sobre a arte de 558×1119 */
 .phone-slide .phone-vid{position:absolute;left:4.8387%;top:11.4388%;width:89.7849%;height:79.8034%;border-radius:1.1976%/.6719%;object-fit:cover;display:block;pointer-events:none;background:transparent}
 </style>
+<style id="sobre-foto-css">
+/* Sobre mim, versão B: foto de óculos pequena junto da apresentação. Computador: círculo de 160px à direita do
+   quadro, alinhado ao topo. Celular: círculo de 120px centralizado acima do quadro. */
+#sobre .about{grid-template-columns:minmax(0,1fr)}
+#sobre .sobre-corpo{display:grid;grid-template-columns:minmax(0,1fr) 160px;gap:36px;align-items:start;max-width:780px}
+#sobre .sobre-corpo .note{grid-column:1;grid-row:1}
+#sobre .sobre-corpo .circle{grid-column:2;grid-row:1;width:160px;justify-self:end}
+@media (max-width:820px){
+  #sobre .sobre-corpo{grid-template-columns:minmax(0,1fr);gap:22px}
+  #sobre .sobre-corpo .circle{grid-column:1;grid-row:1;width:120px;justify-self:center}
+  #sobre .sobre-corpo .note{grid-row:2}
+}
+</style>
 <style id="cert-grid-css">
 /* Certificados: um botão de zoom por certificado, inteiros (sem corte) */
 .cert-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;min-width:0}
@@ -422,14 +435,16 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px}
     <div class="wrap about">
       <div class="reveal">
         <h2 class="retro">Sobre mim</h2>
-        <div class="note">
-          <p><b>Olá, sou a Karen Mathias!</b></p>
-          <p>Há 4 anos, transformo redes sociais em canais estratégicos para marcas que querem crescer, se posicionar e criar conexão com seu público.</p>
-          <p>Meu trabalho combina estratégia de conteúdo, criatividade e análise de dados para criar conteúdos com propósito claro, autenticidade e que gere impacto positivo para a marca.</p>
-          <span class="corner-star" aria-hidden="true">✦</span>
+        <div class="sobre-corpo">
+          <div class="circle"><img src="img/glasses.jpg" width="385" height="400" loading="lazy" decoding="async" alt="Karen Mathias de óculos"></div>
+          <div class="note">
+            <p><b>Olá, sou a Karen Mathias!</b></p>
+            <p>Há 4 anos, transformo redes sociais em canais estratégicos para marcas que querem crescer, se posicionar e criar conexão com seu público.</p>
+            <p>Meu trabalho combina estratégia de conteúdo, criatividade e análise de dados para criar conteúdos com propósito claro, autenticidade e que gere impacto positivo para a marca.</p>
+            <span class="corner-star" aria-hidden="true">✦</span>
+          </div>
         </div>
       </div>
-      <div class="circle reveal"><img src="img/glasses.jpg" width="385" height="400" loading="lazy" decoding="async" alt="Karen Mathias de óculos"></div>
     </div>
   </section>
 
