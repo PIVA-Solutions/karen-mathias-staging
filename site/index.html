@@ -336,6 +336,24 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px}
 .cert-grid .zoom{border-radius:10px}
 .cert-grid img{width:100%;height:auto;border-radius:10px}
 </style>
+<style id="pano-zoom-css">
+/* Cases 2 e 3 · zoom que também é carrossel (componente próprio; o #lb dos outros zooms não muda) */
+.pano-zoom{position:fixed;inset:0;z-index:91;background:rgba(5,2,10,.92);opacity:0;visibility:hidden;transition:opacity .25s,visibility .25s;overflow:hidden}
+.pano-zoom.on{opacity:1;visibility:visible}
+.pano-zoom-strip{position:absolute;inset:0;display:flex;touch-action:none;cursor:grab;will-change:transform;transition:transform .32s cubic-bezier(.22,1,.36,1)}
+.pano-zoom-strip.dragging{transition:none;cursor:grabbing}
+.pano-zoom-item{flex:0 0 100%;display:grid;grid-template:minmax(0,1fr) / minmax(0,1fr);place-items:center;padding:calc(64px + env(safe-area-inset-top,0px)) 16px calc(52px + env(safe-area-inset-bottom,0px));min-width:0}
+.pano-zoom-item img{display:block;max-width:min(1000px,100%);max-height:100%;width:auto;height:auto;border-radius:10px;box-shadow:0 30px 80px rgba(0,0,0,.8);-webkit-user-drag:none;user-select:none;cursor:default}
+.pano-zoom-close{position:absolute;top:calc(16px + env(safe-area-inset-top,0px));right:16px;z-index:3;width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:rgba(255,255,255,.08);color:#fff;font-size:1.3rem;cursor:pointer}
+.pano-zoom-arrow{position:absolute;top:50%;z-index:3;width:44px;height:44px;margin-top:-22px;border-radius:50%;border:0;background:rgba(255,255,255,.85);color:#262626;font:600 1.6rem/1 var(--ui);cursor:pointer;box-shadow:0 0 8px rgba(0,0,0,.35)}
+.pano-zoom-arrow.prev{left:16px}.pano-zoom-arrow.next{right:16px}
+.pano-zoom-count{position:absolute;top:calc(24px + env(safe-area-inset-top,0px));left:50%;transform:translateX(-50%);z-index:3;color:rgba(255,255,255,.75);font:600 .8rem var(--ui);font-variant-numeric:tabular-nums;pointer-events:none}
+.pano-zoom-dots{position:absolute;left:0;right:0;bottom:calc(20px + env(safe-area-inset-bottom,0px));z-index:3;display:flex;justify-content:center;gap:6px;pointer-events:none}
+.pano-zoom-dots i{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.35)}
+.pano-zoom-dots i.on{background:#0095f6}
+@media (hover:none){.pano-zoom-arrow,.pano-zoom-count{display:none}} /* no celular: arraste e pontinhos */
+@media (prefers-reduced-motion:reduce){.pano-zoom,.pano-zoom-strip{transition:none}}
+</style>
 <style id="cases-pano-css">
 /* Cases 2 e 3 · carrossel do Instagram com as artes em "polaroides" sobrepostas, como no post de referência da Karen:
    a arte atual fica grande, a próxima entra pequena POR CIMA no canto superior direito (cortada pela borda) e a anterior
@@ -1039,6 +1057,108 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px}
   layout();
 })();
 </script>
+<script id="pano-zoom-js">
+/* Cases 2 e 3 · zoom navegável. window.panoZoom.open(artes, índice, aoTrocar): cada case passa só as suas 6 artes.
+   Arraste (toque ou mouse) com a imagem acompanhando; solta e encaixa (15% da largura ou gesto rápido); resistência
+   nas pontas; vertical não troca. Setas, ←/→ e contador só no computador. Fecha com ×, toque fora da imagem ou Esc. */
+(function(){
+  var el = null, strip, items = [], dotsEl, countEl, prevB, nextB, closeB, arts = [], cur = 0, onChange = null, isOpen = false, g = null, suppress = false;
+  var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function build(){
+    el = document.createElement('div'); el.className = 'pano-zoom';
+    el.setAttribute('role', 'dialog'); el.setAttribute('aria-modal', 'true'); el.setAttribute('aria-label', 'Artes ampliadas');
+    el.innerHTML = '<div class="pano-zoom-strip"></div><button type="button" class="pano-zoom-close" aria-label="Fechar">×</button>' +
+      '<button type="button" class="pano-zoom-arrow prev" aria-label="Arte anterior">‹</button><button type="button" class="pano-zoom-arrow next" aria-label="Próxima arte">›</button>' +
+      '<span class="pano-zoom-count" aria-live="polite"></span><div class="pano-zoom-dots" aria-hidden="true"></div>';
+    document.body.appendChild(el);
+    strip = el.querySelector('.pano-zoom-strip'); dotsEl = el.querySelector('.pano-zoom-dots'); countEl = el.querySelector('.pano-zoom-count');
+    prevB = el.querySelector('.prev'); nextB = el.querySelector('.next'); closeB = el.querySelector('.pano-zoom-close');
+    closeB.addEventListener('click', close);
+    prevB.addEventListener('click', function(){ go(cur - 1); });
+    nextB.addEventListener('click', function(){ go(cur + 1); });
+    addEventListener('keydown', function(e){
+      if (!isOpen) return;
+      if (e.key === 'Escape') close();
+      else if (e.key === 'ArrowRight'){ e.preventDefault(); go(cur + 1); }
+      else if (e.key === 'ArrowLeft'){ e.preventDefault(); go(cur - 1); }
+    });
+    addEventListener('resize', function(){ if (isOpen) place(0, true); });
+    // Arraste: só vira horizontal depois de 8 px na horizontal; gesto vertical não troca de arte
+    strip.addEventListener('pointerdown', function(e){
+      if (e.pointerType === 'mouse' && e.button !== 0) return;
+      suppress = false;
+      g = {id: e.pointerId, x: e.clientX, y: e.clientY, dx: 0, h: false, done: false, lx: e.clientX, lt: performance.now(), v: 0};
+    });
+    strip.addEventListener('pointermove', function(e){
+      if (!g || e.pointerId !== g.id || g.done) return;
+      var dx = e.clientX - g.x, dy = e.clientY - g.y, now = performance.now();
+      if (!g.h){
+        if (Math.abs(dx) > 8 && Math.abs(dx) > Math.abs(dy)){ g.h = true; strip.classList.add('dragging'); try { strip.setPointerCapture(e.pointerId); } catch(err){} }
+        else if (Math.abs(dy) > 8){ g = null; return; }
+      }
+      if (g.h){
+        if (now > g.lt){ g.v = (e.clientX - g.lx) / (now - g.lt); g.lx = e.clientX; g.lt = now; }
+        g.dx = ((cur === 0 && dx > 0) || (cur === arts.length - 1 && dx < 0)) ? dx / 3 : dx; // resistência elástica nas pontas
+        place(g.dx, true);
+      }
+    });
+    function end(e){
+      if (!g || e.pointerId !== g.id || g.done) return;
+      var gs = g; gs.done = true; g = null;
+      if (!gs.h) return;
+      suppress = true; strip.classList.remove('dragging');
+      var W = el.clientWidth, fast = Math.abs(gs.v) > .5 && Math.abs(gs.dx) > 20;
+      if (Math.abs(gs.dx) > W * .15 || fast) go(cur + (gs.dx < 0 ? 1 : -1)); else place(0);
+    }
+    strip.addEventListener('pointerup', end);
+    strip.addEventListener('pointercancel', end);
+    strip.addEventListener('lostpointercapture', function(e){ if (e.target === strip) end(e); }); // só a captura do próprio strip encerra o gesto
+    // Toque/clique fora da imagem fecha; o click que vem depois de um arraste é ignorado
+    strip.addEventListener('click', function(e){
+      if (suppress){ suppress = false; return; }
+      if (!e.target.closest('img')) close();
+    });
+  }
+  function place(dx, instant){
+    var W = el.clientWidth;
+    if (instant) strip.style.transition = 'none'; else strip.style.transition = '';
+    strip.style.transform = 'translateX(' + (-cur * W + (dx || 0)) + 'px)';
+    if (instant){ void strip.offsetWidth; strip.style.transition = ''; }
+  }
+  function load(i){ var it = items[i]; if (it && !it.img.getAttribute('src')) it.img.src = arts[i].src; }
+  function go(i, instant){
+    var n = Math.max(0, Math.min(arts.length - 1, i)), changed = n !== cur; cur = n;
+    load(cur); load(cur - 1); load(cur + 1);              // a atual e as vizinhas já carregadas: troca instantânea
+    place(0, instant || reduce);
+    countEl.textContent = (cur + 1) + ' / ' + arts.length;
+    Array.prototype.forEach.call(dotsEl.children, function(d, k){ d.classList.toggle('on', k === cur); });
+    prevB.hidden = cur === 0; nextB.hidden = cur === arts.length - 1;
+    items.forEach(function(it, k){ it.box.setAttribute('aria-hidden', k === cur ? 'false' : 'true'); });
+    if (changed && onChange) onChange(cur);                 // o carrossel da página acompanha por trás
+  }
+  function open(list, i, cb){
+    if (!el) build();
+    arts = list; onChange = cb; strip.innerHTML = ''; dotsEl.innerHTML = ''; items = [];
+    arts.forEach(function(a){
+      var box = document.createElement('div'); box.className = 'pano-zoom-item';
+      var img = document.createElement('img'); img.alt = a.alt || ''; img.decoding = 'async'; img.draggable = false;
+      box.appendChild(img); strip.appendChild(box); items.push({box: box, img: img});
+      dotsEl.appendChild(document.createElement('i'));
+    });
+    isOpen = true; cur = -1;
+    document.documentElement.style.overflow = 'hidden';
+    go(i, true);
+    void el.offsetWidth; el.classList.add('on');
+    closeB.focus({preventScroll: true});
+  }
+  function close(){
+    if (!isOpen) return; isOpen = false; g = null;
+    el.classList.remove('on');
+    document.documentElement.style.overflow = '';
+  }
+  window.panoZoom = {open: open, close: close, isOpen: function(){ return isOpen; }};
+})();
+</script>
 <script id="cases-pano-js">
 /* Cases 2 e 3 · polaroides sobrepostas. Cada .pano tem estado próprio. Arraste horizontal (toque ou mouse) passa uma arte;
    a rolagem vertical da página segue nativa (touch-action: pan-y). Toque na próxima arte avança; na atual, abre o zoom. */
@@ -1147,6 +1267,11 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px}
       var s = e.target.closest('.pano-slide'); if (!s) return;
       var i = slides.indexOf(s);
       if (i !== active){ go(i); return; }
+      if (window.panoZoom){
+        window.panoZoom.open(slides.map(function(x){ var im = x.querySelector('img'); return {src: im.getAttribute('src'), alt: im.alt}; }), i,
+          function(k){ go(k); });                          // o carrossel da página acompanha a arte do zoom
+        return;
+      }
       var lb = document.getElementById('lb'), img = lb && lb.querySelector('img'), src = s.querySelector('img');
       if (!img || !src) return;
       img.src = src.getAttribute('src'); img.alt = src.alt; lb.classList.add('on');
