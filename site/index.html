@@ -332,7 +332,7 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px}
 .pano-arrow:hover{background:#fff}
 .pano-arrow::before{content:"";position:absolute;left:50%;top:50%;width:8px;height:8px;border:solid #262626;border-width:0 2px 2px 0;transform:translate(-65%,-50%) rotate(-45deg)}
 .pano-arrow.prev::before{transform:translate(-35%,-50%) rotate(135deg)}
-@media (hover:none){.pano-arrow{display:none}} /* no celular, como no app: só o arraste */
+@media (hover:none){.pano-arrow,.pano-count{display:none}} /* no celular, como no app: só o arraste e os pontinhos */
 .pano-dots{display:flex;justify-content:center;gap:4px;margin-top:6px}
 .pano-dots button{width:6px;height:6px;padding:0;border:0;border-radius:50%;background:rgba(255,255,255,.35);cursor:pointer;transition:background .2s}
 .pano-dots button[aria-current="true"]{background:#0095f6}
