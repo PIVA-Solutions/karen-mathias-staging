@@ -62,6 +62,13 @@ A base continua sendo a do portfólio original: mesma ordem de seções, mesmos 
 - **WhatsApp** com o número oficial da Karen.
 - **Cases 2 e 3:** carrossel no estilo do post de referência da Karen no Instagram: as artes viram polaroides, a atual fica grande e a próxima entra pequena por cima, no canto. Arraste ou setas passam uma arte por vez, com contador, pontinhos e zoom para leitura.
 - **Correções (14/11):** "Sobre mim" voltou a ficar em duas colunas no computador (um erro de CSS desfazia o layout); a dica do Case 1 agora diz que o toque pausa o vídeo; as artes de Tipografia voltaram às versões originais, sem a ampliação por IA, que alterava letras.
+- **Cases 1, 2 e 3 do mesmo tamanho (15/11):** os três usam o mesmo palco (mesma largura e altura), um pouco maior; o mosaico de posts do Case 1 ficou centralizado.
+- **Case 1, 3º celular com vídeo (20/11):** vídeo da Mayara na poltrona, no mesmo padrão dos outros dois (MP4 H.264 720p, 15 s, sem áudio).
+- **Rodada de homologação (20/11):**
+  - Cases 2 e 3: o arraste com o dedo voltou a funcionar nos dois sentidos (antes o gesto era encerrado logo no começo).
+  - Cases 2 e 3 no celular: só o arraste e os pontinhos; contador e setas ficam no computador.
+  - Certificados: os 4 aparecem inteiros, lado a lado, e cada um abre em tela cheia com um toque. As versões publicadas têm CPF, RG e data de nascimento cobertos.
+  - Sobre mim: a foto de óculos ficou pequena, ao lado da apresentação no computador e acima dela no celular.
 
 ## Roteiro de testes para a Karen
 
