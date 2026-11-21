@@ -302,17 +302,6 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px}
 @media (max-width:640px){.phone-stage{--pw:min(70vw,285px)}}
 @media (prefers-reduced-motion:reduce){.phone-slide,.phone-slide::after{transition-duration:.01s!important}}
 </style>
-<style id="case1-zoom-css">
-/* Case 1 · toque no celular do centro amplia o celular com o vídeo (overlay próprio, não o #lb) */
-.phone-zoom{position:fixed;inset:0;z-index:92;display:grid;place-items:center;background:rgba(0,0,0,.85);opacity:0;visibility:hidden;transition:opacity .3s,visibility .3s}
-.phone-zoom.on{opacity:1;visibility:visible}
-.phone-zoom-phone{position:relative;height:min(88vh,900px,calc(92vw * 1119 / 558));aspect-ratio:558/1119;transform:scale(.92);transition:transform .3s cubic-bezier(.22,1,.36,1)}
-.phone-zoom.on .phone-zoom-phone{transform:none}
-.phone-zoom-phone img{display:block;width:100%;height:100%;object-fit:contain;-webkit-user-drag:none;user-select:none}
-.phone-zoom-phone video{position:absolute;left:4.8387%;top:11.4388%;width:89.7849%;height:79.8034%;border-radius:1.1976%/.6719%;object-fit:cover;display:block;background:transparent}
-.phone-zoom-close{position:absolute;top:calc(16px + env(safe-area-inset-top,0px));right:16px;width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:rgba(255,255,255,.08);color:#fff;font-size:1.3rem;cursor:pointer}
-@media (prefers-reduced-motion:reduce){.phone-zoom,.phone-zoom-phone{transition:none}}
-</style>
 <style id="case1-video-css">
 /* Case 1 · vídeo encaixado na tela do celular: retângulo (27,128)–(528,1021) sobre a arte de 558×1119 */
 .phone-slide .phone-vid{position:absolute;left:4.8387%;top:11.4388%;width:89.7849%;height:79.8034%;border-radius:1.1976%/.6719%;object-fit:cover;display:block;pointer-events:none;background:transparent}
@@ -619,7 +608,7 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px}
             <div class="phone-dots" role="group" aria-label="Escolher vídeo"></div>
             <button type="button" class="phone-nav" data-dir="1" aria-label="Próximo vídeo">→</button>
           </div>
-          <p class="phone-hint">Arraste para o lado · toque no celular para ampliar</p>
+          <p class="phone-hint">Arraste para o lado ou toque no celular para ampliar</p>
         </div>
         <button class="zoom" data-src="img/case1_posts.jpg" aria-label="Ampliar posts do case 1"><img src="img/case1_posts.jpg" width="1134" height="560" loading="lazy" decoding="async" alt="Posts em tons de laranja sobre a NR-1"></button>
       </article>
@@ -836,7 +825,7 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px}
   function all(){ return Array.prototype.slice.call(stage.querySelectorAll('video.phone-vid')); }
   function pauseAll(keep){ all().forEach(function(o){ if (o !== keep && !o.paused) o.pause(); }); }
   function start(v){
-    if (!v || !v.isConnected || v._waiting || v._zoomHold || !loaded || !onScreen || document.hidden) return; // com o overlay aberto, o vídeo do slide fica parado
+    if (!v || !v.isConnected || v._waiting || !loaded || !onScreen || document.hidden) return;
     pauseAll(v); // nunca mais de um tocando
     var p = v.play();
     if (p && p.catch) p.catch(function(e){ dbg.err = 'play(): ' + ((e && (e.name + ' ' + e.message)) || e); }); // fica o pôster
@@ -876,15 +865,6 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px}
         requestAnimationFrame(function(){ if (current !== v){ try { v.currentTime = 0; } catch(e){} } }); // vizinho volta ao quadro inicial (= pôster)
       });
     }
-  };
-
-  // Overlay do Case 1: segura o vídeo do slide parado enquanto o ampliado toca, e solta depois (start() decide se toca)
-  window.case1VideoHold = function(v, on){
-    v._zoomHold = !!on;
-    if (on){ if (!v.paused) v.pause(); } else start(v);
-  };
-  window.case1VideoSrc = function(v){ // endereço do vídeo, mesmo antes do lazy-load preencher o <source>
-    var s = v.querySelector('source'); return v.currentSrc || (s && (s.getAttribute('src') || s.getAttribute('data-src'))) || '';
   };
 
   // Lazy-load: os vídeos só são buscados quando o carrossel chega perto da tela
@@ -985,66 +965,24 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px}
     if (moved && Math.abs(dx) > 40){ step(dx < 0 ? 1 : -1); hold(); }
   });
   addEventListener('pointercancel', function(){ down = false; track.classList.remove('dragging'); });
-  // Celular do centro: o toque amplia o celular com o vídeo (ou só a arte, se não houver vídeo utilizável)
-  var zoomEl = null, zoomVid = null, zoomSlideVid = null, zoomOpen = false;
-  function buildZoom(){
-    zoomEl = document.createElement('div'); zoomEl.className = 'phone-zoom';
-    zoomEl.setAttribute('role', 'dialog'); zoomEl.setAttribute('aria-modal', 'true'); zoomEl.setAttribute('aria-label', 'Vídeo ampliado');
-    zoomEl.innerHTML = '<button type="button" class="phone-zoom-close" aria-label="Fechar">×</button><div class="phone-zoom-phone"><img alt=""></div>';
-    document.body.appendChild(zoomEl);
-    zoomEl.addEventListener('click', function(e){ if (!e.target.closest('.phone-zoom-phone') || e.target.closest('.phone-zoom-close')) closeZoom(); });
-    addEventListener('keydown', function(e){ if (zoomOpen && e.key === 'Escape') closeZoom(); });
-  }
-  function openZoom(s){
-    if (!zoomEl) buildZoom();
-    var art = s.querySelector('img'), phone = zoomEl.querySelector('.phone-zoom-phone'), img = phone.querySelector('img');
-    img.src = art.getAttribute('src'); img.alt = art.getAttribute('alt') || '';
-    var v = s.querySelector('video'), src = v && !v.error && v.isConnected && window.case1VideoSrc ? window.case1VideoSrc(v) : '';
-    if (src){
-      zoomSlideVid = v;
-      var t = v.currentTime || 0;
-      if (window.case1VideoHold) window.case1VideoHold(v, true); // o vídeo do slide pausa enquanto o ampliado toca
-      zoomVid = document.createElement('video');
-      zoomVid.muted = true; zoomVid.loop = true; zoomVid.playsInline = true;
-      ['muted','loop','playsinline','webkit-playsinline'].forEach(function(a){ zoomVid.setAttribute(a, ''); });
-      zoomVid.setAttribute('aria-hidden', 'true');
-      zoomVid.addEventListener('loadedmetadata', function(){ try { zoomVid.currentTime = t; } catch(e){} }, {once: true});
-      zoomVid.addEventListener('error', function(){ if (zoomVid && zoomVid.parentNode) zoomVid.parentNode.removeChild(zoomVid); }); // falhou: fica só a arte
-      zoomVid.src = src;
-      phone.appendChild(zoomVid);
-      var p = zoomVid.play(); if (p && p.catch) p.catch(function(){});
-    }
-    zoomOpen = true; stopped = true;                       // autoplay do carrossel parado com o overlay aberto
-    document.documentElement.style.overflow = 'hidden';    // rolagem da página bloqueada
-    void zoomEl.offsetWidth; zoomEl.classList.add('on');
-    zoomEl.querySelector('.phone-zoom-close').focus({preventScroll: true});
-  }
-  function closeZoom(){
-    if (!zoomOpen) return; zoomOpen = false;
-    zoomEl.classList.remove('on');
-    document.documentElement.style.overflow = '';
-    if (zoomVid){
-      var t = zoomVid.currentTime, v = zoomSlideVid;
-      zoomVid.pause(); zoomVid.removeAttribute('src'); zoomVid.load();
-      if (zoomVid.parentNode) zoomVid.parentNode.removeChild(zoomVid);
-      zoomVid = null; zoomSlideVid = null;
-      if (v){ try { if (v.readyState >= 1) v.currentTime = t; } catch(e){} if (window.case1VideoHold) window.case1VideoHold(v, false); } // o slide segue de onde o ampliado parou
-    }
-    hold();                                                // autoplay volta (depois da pausa normal de interação)
+  // Celular do centro: o toque abre o zoom do site (#lb) com a imagem do celular; o vídeo segue tocando por trás
+  function zoom(s){
+    var lb = document.getElementById('lb'); // zoom do site, se existir
+    if (lb){ var img = lb.querySelector('img'), src = s.querySelector('img'); if (img && src){ img.src = src.getAttribute('src'); img.alt = src.alt; lb.classList.add('on'); } }
   }
   slides.forEach(function(s, i){
     s.addEventListener('click', function(){
-      if (moved || far) return;                            // arrastar nunca abre o overlay
+      if (moved || far) return;                            // arrastar nunca abre o zoom
       if (offset(i) !== 0){ go(i); hold(); return; }       // celular lateral: só vem para o centro
-      openZoom(s);
+      zoom(s);
     });
   });
 
   // Autoplay suave: só com a seção na tela, aba visível e sem interação recente
-  var timer = null, visible = false, hovering = false, holdUntil = 0, stopped = false;
-  function hold(){ if (zoomOpen) return; stopped = false; holdUntil = Date.now() + 9000; } // com o overlay aberto, o autoplay fica parado
+  var timer = null, visible = false, hovering = false, holdUntil = 0;
+  function hold(){ holdUntil = Date.now() + 9000; }
   var lastScroll = 0; addEventListener('scroll', function(){ lastScroll = Date.now(); }, {passive:true}); // não troca de slide com a página rolando
-  function tick(){ if (visible && !stopped && !hovering && !document.hidden && !down && Date.now() > holdUntil && Date.now() - lastScroll > 600 && !stage.contains(document.activeElement)) step(1); }
+  function tick(){ if (visible && !hovering && !document.hidden && !down && Date.now() > holdUntil && Date.now() - lastScroll > 600 && !stage.contains(document.activeElement)) step(1); }
   if (!reduce){
     timer = setInterval(tick, 4500);
     stage.addEventListener('mouseenter', function(){ hovering = true; });
