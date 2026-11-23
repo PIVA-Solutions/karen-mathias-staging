@@ -812,8 +812,9 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px}
     var v = document.createElement('video');
     v.className = 'phone-vid';
     // tudo isto antes de qualquer load(): iOS só reproduz inline e sem gesto se o vídeo já nascer mudo e inline
-    v.muted = true; v.loop = true; v.playsInline = true; v.preload = 'none';
-    ['muted','loop','playsinline','webkit-playsinline'].forEach(function(a){ v.setAttribute(a, ''); });
+    // sem loop: o autoplay do carrossel avança quando o vídeo termina ('ended'); sem autoplay possível, o carrossel recomeça o vídeo
+    v.muted = true; v.loop = false; v.playsInline = true; v.preload = 'none';
+    ['muted','playsinline','webkit-playsinline'].forEach(function(a){ v.setAttribute(a, ''); });
     v.setAttribute('preload', 'none'); v.setAttribute('aria-hidden', 'true');
     v.setAttribute('width', '720'); v.setAttribute('height', '1280'); // proporção do pôster (720×1280)
     v.setAttribute('poster', 'img/' + name + '_poster.webp');
@@ -941,7 +942,7 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px}
     var cur = active % real;
     Array.prototype.forEach.call(dots.children, function(b, k){ b.setAttribute('aria-current', k === cur ? 'true' : 'false'); });
   }
-  function go(i){ active = ((i % N) + N) % N; layout(); }
+  function go(i){ var n = ((i % N) + N) % N; if (n !== active) activeSince = Date.now(); active = n; layout(); }
   function step(dir){ go(active + dir); }
 
   // Setas e teclado
@@ -978,13 +979,29 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px}
     });
   });
 
-  // Autoplay suave: só com a seção na tela, aba visível e sem interação recente
-  var timer = null, visible = false, hovering = false, holdUntil = 0;
+  // Autoplay suave: só com a seção na tela, aba visível e sem interação recente.
+  // Celular com vídeo: avança quando o vídeo termina ('ended'), para cada vídeo tocar inteiro.
+  // Celular sem vídeo, vídeo com erro ou play() recusado: avança pelo intervalo de 4,5 s (fallback).
+  var timer = null, visible = false, hovering = false, holdUntil = 0, activeSince = Date.now();
   function hold(){ holdUntil = Date.now() + 9000; }
   var lastScroll = 0; addEventListener('scroll', function(){ lastScroll = Date.now(); }, {passive:true}); // não troca de slide com a página rolando
-  function tick(){ if (visible && !hovering && !document.hidden && !down && Date.now() > holdUntil && Date.now() - lastScroll > 600 && !stage.contains(document.activeElement)) step(1); }
+  function free(){ return visible && !hovering && !document.hidden && !down && !stage.contains(document.activeElement); }
+  function activeVideo(){ var v = slides[active].querySelector('video.phone-vid'); return v && v.isConnected ? v : null; }
+  function tick(){
+    if (Date.now() - activeSince < 4500) return;
+    var v = activeVideo();
+    if (v && (!v.paused || v._waiting)) return;              // vídeo tocando: quem avança é o 'ended'
+    if (free() && Date.now() > holdUntil && Date.now() - lastScroll > 600) step(1);
+  }
+  function ended(v){
+    if (!v._active || reduce) return;
+    if (free() && Date.now() - lastScroll > 600) step(1);
+    else if (visible && !document.hidden && (down || Date.now() - lastScroll <= 600)) setTimeout(function(){ if (v._active && v.ended) ended(v); }, 700); // rolando/arrastando: tenta de novo já já
+    else { try { v.currentTime = 0; } catch(e){} var p = v.play(); if (p && p.catch) p.catch(function(){}); } // mouse em cima ou foco no carrossel: recomeça (como loop)
+  }
+  slides.forEach(function(s){ var v = s.querySelector('video.phone-vid'); if (v) v.addEventListener('ended', function(){ ended(v); }); });
   if (!reduce){
-    timer = setInterval(tick, 4500);
+    timer = setInterval(tick, 500);
     stage.addEventListener('mouseenter', function(){ hovering = true; });
     stage.addEventListener('mouseleave', function(){ hovering = false; });
     if ('IntersectionObserver' in window) new IntersectionObserver(function(es){ visible = es[0].isIntersecting; }, {threshold:.35}).observe(stage);
