@@ -330,6 +330,11 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px}
 @media (hover:none){.c1-zoom-arrow,.c1-zoom-count{display:none}} /* no celular: arraste e pontinhos */
 @media (prefers-reduced-motion:reduce){.c1-zoom,.c1-zoom-strip{transition:none}}
 </style>
+<style id="mutti-polpa-css">
+/* Mutti · vídeo da Polpa no lugar da imagem (mesma caixa e mesmo efeito de hover do .zoom img) */
+.zoom video.mutti-polpa{display:block;width:100%;height:auto;transition:transform .5s}
+.zoom:hover video.mutti-polpa{transform:scale(1.04)}
+</style>
 <style id="sobre-foto-css">
 /* Sobre mim, versão B: foto de óculos pequena junto da apresentação. Computador: círculo de 160px à direita do
    quadro, alinhado ao topo. Celular: círculo de 120px centralizado acima do quadro. */
@@ -528,14 +533,14 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px}
         <div class="counter" id="counter">
           <div><b data-count="36">36</b><small>seguidores empresariais</small></div>
           <span class="to">→</span>
-          <div><b class="grad" data-count="1264">1.264</b><small>em 4 meses</small></div>
+          <div><b class="grad" data-count="1304">1.304</b><small>seguidores hoje</small></div>
         </div>
         <p class="lead">Em 4 meses, atingimos nossos objetivos de aumentar as contas profissionais alcançadas e fechamos parceria com um dos maiores influenciadores de pizza napolitana no Brasil. Começamos com 36 seguidores empresariais e chegamos em 1.264, um crescimento impressionante para uma empresa B2B do setor de Foodservice.</p>
       </div>
       <div class="compare-wrap reveal">
         <div class="compare" id="compare">
-          <img src="img/mutti_antes.jpg" width="265" height="380" loading="lazy" decoding="async" alt="Perfil da Mutti antes, com 36 seguidores">
-          <img class="after" src="img/mutti_depois.jpg" width="265" height="380" loading="lazy" decoding="async" alt="Perfil da Mutti depois, com 1.264 seguidores">
+          <img src="img/mutti_antes.webp" width="795" height="1140" loading="lazy" decoding="async" alt="Perfil da Mutti antes, com 36 seguidores">
+          <img class="after" src="img/mutti_depois.webp" width="795" height="1140" loading="lazy" decoding="async" alt="Perfil da Mutti depois, com 1.304 seguidores">
           <span class="tag l">Antes</span><span class="tag r">Depois</span>
           <div class="handle"></div>
           <input type="range" id="compare-range" min="0" max="100" value="50" aria-label="Comparar antes e depois">
@@ -555,16 +560,16 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px}
         <p class="lead" style="margin-top:14px">A Mutti disponibilizou seu padrão de tipografia para ser seguido em todos os materiais de comunicação.</p>
       </div>
       <div class="type-grid">
-        <button class="zoom reveal" data-src="img/tipo_cursiva.jpg" aria-label="Ampliar tipografia cursiva"><img src="img/tipo_cursiva.jpg" width="823" height="895" loading="lazy" decoding="async" alt="Folha da fonte cursiva Kitten Swash Monoline"></button>
+        <button class="zoom reveal" data-src="img/tipo_cursiva.webp" aria-label="Ampliar tipografia cursiva"><img src="img/tipo_cursiva.webp" width="987" height="1073" loading="lazy" decoding="async" alt="Folha da fonte cursiva Kitten Swash Monoline"></button>
         <div class="type-side">
           <div class="type-block reveal">
-            <button class="zoom" data-src="img/tipo_cursiva_app.jpg" aria-label="Ampliar aplicação da cursiva"><img src="img/tipo_cursiva_app.jpg" width="1098" height="452" loading="lazy" decoding="async" alt="Fonte cursiva aplicada nas embalagens Mutti"></button>
+            <button class="zoom" data-src="img/tipo_cursiva_app.webp" aria-label="Ampliar aplicação da cursiva"><img src="img/tipo_cursiva_app.webp" width="2065" height="850" loading="lazy" decoding="async" alt="Fonte cursiva aplicada nas embalagens Mutti"></button>
           </div>
           <div class="type-block reveal">
             <p class="sub">Sans Serifa</p>
             <p>A empresa exigia que esse padrão fosse respeitado, garantindo uniformidade e coerência em todas as representações visuais da marca.</p>
-            <button class="zoom" data-src="img/tipo_sans.jpg" aria-label="Ampliar tipografia sans serifa"><img src="img/tipo_sans.jpg" width="802" height="759" loading="lazy" decoding="async" alt="Folha da fonte Rhode Bold Condensed"></button>
-            <button class="zoom" data-src="img/tipo_sans_app.jpg" aria-label="Ampliar aplicação da sans serifa"><img src="img/tipo_sans_app.jpg" width="1098" height="549" loading="lazy" decoding="async" alt="Fonte sans serifa aplicada em post da Mutti"></button>
+            <button class="zoom" data-src="img/tipo_sans.webp" aria-label="Ampliar tipografia sans serifa"><img src="img/tipo_sans.webp" width="1032" height="977" loading="lazy" decoding="async" alt="Folha da fonte Rhode Bold Condensed"></button>
+            <button class="zoom" data-src="img/tipo_sans_app.webp" aria-label="Ampliar aplicação da sans serifa"><img src="img/tipo_sans_app.webp" width="2192" height="1096" loading="lazy" decoding="async" alt="Fonte sans serifa aplicada em post da Mutti"></button>
           </div>
         </div>
       </div>
@@ -578,10 +583,10 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px}
       <p class="lead reveal" style="margin:16px auto 0">Inspirado nas personalidades dos produtos Mutti, além da tipografia, era importante seguir o modelo de cores.</p>
       <div class="colors" id="colors">
         <div class="dot" style="background:#e3262e"><b>Vermelho Intenso</b><span>Simboliza urgência e chama a atenção com impacto</span></div>
-        <div class="dot" style="background:#b1232b"><b>Vermelho Clássico</b><span>Continuidade para os formatos antigos, em linhas escritas com fundo claro</span></div>
-        <div class="dot gold" style="background:#d8a21f"><b>Dourado Vibrante</b><span>Destaques que dão energia, entusiasmo e calor</span></div>
+        <div class="dot" style="background:#b1232b"><b>Vermelho Clássico</b><span>Continuidade para os formatos antigos. Usados para linhas escritas com fundo claro</span></div>
+        <div class="dot gold" style="background:#d8a21f"><b>Dourado Vibrante</b><span>Usado para destaques e dar energia, transmitindo entusiasmo e calor</span></div>
         <div class="dot" style="background:#8f1b25"><b>Vermelho em Negrito</b><span>Destaca linhas e pequenos elementos gráficos</span></div>
-        <div class="dot" style="background:#f86c51"><b>Vermelho Alegre</b><span>Enfatiza pacotes, ilustrações e animações</span></div>
+        <div class="dot" style="background:#f86c51"><b>Vermelho Alegre</b><span>Enfatiza pacotes, ilustrações e animações. Usado em diversos formatos</span></div>
       </div>
     </div>
   </section>
@@ -596,7 +601,7 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px}
         <p class="lead" style="margin-top:14px">A empresa também forneceu a Logo para personalização e as imagens em png para os criativos.</p>
       </div>
       <div class="duo">
-        <button class="zoom reveal" data-src="img/mutti_polpa.jpg" aria-label="Ampliar criativo Mutti Polpa"><img src="img/mutti_polpa.jpg" width="760" height="1300" loading="lazy" decoding="async" alt="Criativo Mutti Polpa, tomates finamente picados"></button>
+        <button class="zoom reveal" data-src="img/mutti_polpa_poster.webp" aria-label="Ampliar criativo Mutti Polpa"><video class="mutti-polpa" src="video/mutti_polpa.mp4" width="720" height="1280" poster="img/mutti_polpa_poster.webp" muted playsinline webkit-playsinline loop autoplay preload="none" aria-hidden="true"></video><img src="img/mutti_polpa_poster.webp" width="720" height="1280" loading="lazy" decoding="async" alt="Criativo Mutti Polpa, tomates finamente picados" hidden></button>
         <div class="stack">
           <div class="reveal">
             <button class="zoom" data-src="img/mutti_produtos.jpg" aria-label="Ampliar logo e produtos"><img src="img/mutti_produtos.jpg" width="1095" height="335" loading="lazy" decoding="async" alt="Logo Mutti original e versão Professional com produtos"></button>
@@ -606,7 +611,7 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px}
             <h2 class="retro" style="font-size:clamp(2.2rem,5vw,3.2rem)">Instagram</h2>
             <p class="sub">Posts</p>
             <p class="lead" style="margin-block:12px 16px">Todos os posts seguiram os padrões de cores e tipografia da marca, refletindo sua personalidade. Cada elemento foi escolhido para garantir uma comunicação coesa, profissional e uma presença digital consistente e marcante.</p>
-            <button class="zoom" data-src="img/mutti_feed.jpg" aria-label="Ampliar feed do Instagram"><img src="img/mutti_feed.jpg" width="990" height="396" loading="lazy" decoding="async" alt="Feed do Instagram da Mutti Professional"></button>
+            <button class="zoom" data-src="img/mutti_feed.webp" aria-label="Ampliar feed do Instagram"><img src="img/mutti_feed.webp" width="1980" height="792" loading="lazy" decoding="async" alt="Feed do Instagram da Mutti Professional"></button>
           </div>
         </div>
       </div>
@@ -1416,6 +1421,21 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px}
     var rt; addEventListener('resize', function(){ clearTimeout(rt); rt = setTimeout(function(){ layout(0); }, 120); });
     go(0);
   });
+})();
+</script>
+<script id="mutti-polpa-js">
+/* Mutti · vídeo da Polpa: só toca visível na tela e com a aba aberta; pausa fora da tela. Com movimento reduzido: fica só a capa. */
+(function(){
+  var v = document.querySelector('video.mutti-polpa'); if (!v) return;
+  v.muted = true; v.playsInline = true;
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)){ v.removeAttribute('autoplay'); v.autoplay = false; v.pause(); return; }
+  var on = false;
+  function sync(){
+    var zoomAberto = window.case1Zoom && window.case1Zoom.isOpen(); // um vídeo por vez: o zoom do Case 1 manda
+    if (on && !document.hidden && !zoomAberto){ var p = v.play(); if (p && p.catch) p.catch(function(){}); } else if (!v.paused) v.pause();
+  }
+  new IntersectionObserver(function(es){ on = es[0].isIntersecting; sync(); }, {threshold: .25}).observe(v);
+  document.addEventListener('visibilitychange', sync);
 })();
 </script>
 <script id="case1-debug-js">
