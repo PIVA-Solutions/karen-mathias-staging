@@ -398,6 +398,12 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px}
   .mt-produtos{margin-top:22px}
 }
 </style>
+<style id="skills-icones-css">
+/* TESTE LOCAL · Skills com ícones no lugar dos nomes (o nome fica para leitor de tela e no "title") */
+.chips span.ico{display:grid;place-items:center;width:46px;height:46px;padding:0}
+.chips span.ico img{display:block;width:22px;height:22px}
+.chips .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+</style>
 <style id="sobre-foto-css">
 /* Sobre mim, versão B: foto de óculos pequena junto da apresentação. Computador: círculo de 160px à direita do
    quadro, alinhado ao topo. Celular: círculo de 120px centralizado acima do quadro. */
@@ -621,10 +627,10 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px}
     <div class="wrap">
       <div class="skills-head"><h2 class="retro">Skills</h2></div>
       <div class="skills stagger">
-        <div class="group"><h3>Redes sociais</h3><div class="chips"><span>Instagram</span><span>TikTok</span><span>Facebook</span><span>Pinterest</span><span>LinkedIn</span><span>X</span></div></div>
-        <div class="group"><h3>Edição</h3><div class="chips"><span>CapCut</span><span>Photoroom</span><span>Lightroom</span></div></div>
-        <div class="group"><h3>Criação e design</h3><div class="chips"><span>Canva</span><span>Procreate</span></div></div>
-        <div class="group"><h3>IA</h3><div class="chips"><span>ChatGPT</span><span>Claude</span><span>Gemini</span></div></div>
+        <div class="group"><h3>Redes sociais</h3><div class="chips"><span class="ico" title="Instagram"><img src="img/icons/instagram.svg" width="22" height="22" alt="" loading="lazy"><i class="sr">Instagram</i></span><span class="ico" title="TikTok"><img src="img/icons/tiktok.svg" width="22" height="22" alt="" loading="lazy"><i class="sr">TikTok</i></span><span class="ico" title="Facebook"><img src="img/icons/facebook.svg" width="22" height="22" alt="" loading="lazy"><i class="sr">Facebook</i></span><span class="ico" title="Pinterest"><img src="img/icons/pinterest.svg" width="22" height="22" alt="" loading="lazy"><i class="sr">Pinterest</i></span><span class="ico" title="LinkedIn"><img src="img/icons/linkedin.svg" width="22" height="22" alt="" loading="lazy"><i class="sr">LinkedIn</i></span><span class="ico" title="X"><img src="img/icons/x.svg" width="22" height="22" alt="" loading="lazy"><i class="sr">X</i></span></div></div>
+        <div class="group"><h3>Edição</h3><div class="chips"><span class="ico" title="CapCut"><img src="img/icons/capcut.svg" width="22" height="22" alt="" loading="lazy"><i class="sr">CapCut</i></span><span class="ico" title="Photoroom"><img src="img/icons/photoroom.svg" width="22" height="22" alt="" loading="lazy"><i class="sr">Photoroom</i></span><span class="ico" title="Lightroom"><img src="img/icons/adobelightroom.svg" width="22" height="22" alt="" loading="lazy"><i class="sr">Lightroom</i></span></div></div>
+        <div class="group"><h3>Criação e design</h3><div class="chips"><span class="ico" title="Canva"><img src="img/icon_canva.png" width="22" height="22" alt="" loading="lazy"><i class="sr">Canva</i></span><span class="ico" title="Procreate"><img src="img/icon_procreate.png" width="22" height="22" alt="" loading="lazy"><i class="sr">Procreate</i></span></div></div>
+        <div class="group"><h3>IA</h3><div class="chips"><span class="ico" title="ChatGPT"><img src="img/icons/openai.svg" width="22" height="22" alt="" loading="lazy"><i class="sr">ChatGPT</i></span><span class="ico" title="Claude"><img src="img/icons/claude.svg" width="22" height="22" alt="" loading="lazy"><i class="sr">Claude</i></span><span class="ico" title="Gemini"><img src="img/icons/googlegemini.svg" width="22" height="22" alt="" loading="lazy"><i class="sr">Gemini</i></span></div></div>
         <div class="group special"><h3>Especialidades</h3><ul><li>Mídia social</li><li>Marketing de conteúdo</li><li>Copywriting</li><li>Edição e criação de vídeos</li><li>Posicionamento de marca</li></ul></div>
       </div>
     </div>
