@@ -208,6 +208,14 @@ section{padding-block:clamp(70px,10vw,120px);position:relative;overflow:hidden;o
 .dot:hover{transform:scale(1.08) rotate(-3deg)}
 .dot b{font:600 .95rem var(--ui);text-decoration:underline;text-underline-offset:3px}
 .dot span{font-size:.8rem;line-height:1.35;margin-top:6px}
+/* círculos sempre redondos: o texto escala com o tamanho do círculo (cqi) em vez de esticar a altura */
+@supports (width:1cqi){
+.dot{flex:none;overflow:hidden;padding:0;container-type:inline-size}
+.dot b,.dot span{max-width:76cqi;justify-self:center}
+.dot b{font-size:8cqi;text-underline-offset:1.6cqi}
+.dot span{font-size:6.7cqi;margin-top:3cqi}
+}
+@media (max-width:600px){.dot{width:min(190px,calc((100% - 16px)/2))}}
 .dot.gold{color:#2a1a00}
 .colors.pre .dot{opacity:0;transform:scale(.6)}
 .colors.in .dot{transition:opacity .6s cubic-bezier(.2,1.4,.4,1),transform .6s cubic-bezier(.2,1.4,.4,1)}
