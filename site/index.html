@@ -369,10 +369,11 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px}
   .cert{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px;align-items:center}
   .cert-photo{width:auto;margin-inline:0;border-radius:14px}
   .cert-copy{gap:12px}
-  .cert-copy h2{font-size:clamp(1.5rem,7.5vw,2.4rem)}
+  .cert-copy h2{font-size:clamp(1.2rem,6vw,2.4rem);white-space:nowrap;position:relative;z-index:1}
   .cert-copy .lead{font-size:.84rem;line-height:1.5}
   .cert-grid{gap:6px}
 }
+@media (min-width:600px) and (max-width:820px){#sobre .sobre-corpo{grid-template-columns:minmax(0,1fr) 230px}}
 </style>
 <style id="cert-grid-css">
 /* Certificados: um botão de zoom por certificado, inteiros (sem corte) */
