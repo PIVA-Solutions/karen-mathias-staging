@@ -368,6 +368,12 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px}
 .cert{align-items:stretch}
 .cert-copy{display:flex;flex-direction:column;justify-content:space-between}
 .cert-copy h2{text-align:center}
+/* computador: fileira de baixo termina junto com o texto; a de cima sobe — o espaço livre fica dividido igual (título→cima e cima→baixo) */
+@media (min-width:821px){
+  .cert .cert-grid{flex:1;grid-template-rows:minmax(0,1fr) auto minmax(12px,1fr) auto;row-gap:0}
+  .cert .cert-grid .zoom:nth-child(-n+2){grid-row:2}
+  .cert .cert-grid .zoom:nth-child(n+3){grid-row:4}
+}
 @media (max-width:820px){
   /* celular: um certificado embaixo do outro; a coluna não cresce além da foto + texto e os 4 dividem essa altura */
   .cert .cert-copy{contain:size}
