@@ -389,9 +389,12 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px}
   .mt-insta-pano .pano-track{height:min(calc((100vw - 32px) * 1.5), 620px)}
   .mt-insta-pano .pano-slide img{aspect-ratio:600/1067;object-fit:contain}
   .mt-insta-pano .pano-slide.is-phone{background:none;box-shadow:none}
-  .mt-cores{grid-template-columns:minmax(0,1fr);justify-items:center}
-  .mt-cores .colors{width:100%}
-  .mt-polpa{--pv:min(64vw,300px)}
+  /* celular: círculos à esquerda (2, 2 e 1) e o vídeo da Polpa à direita, como no computador */
+  .mt-cores{grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:10px;align-items:center}
+  .mt-cores .colors{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;width:auto;margin:0}
+  .mt-cores .colors .dot{width:100%}
+  .mt-cores .colors .dot:nth-child(5){grid-column:1/-1;justify-self:center;width:calc(50% - 3px)}
+  .mt-polpa{--pv:100%}
   .mt-produtos{margin-top:22px}
 }
 </style>
