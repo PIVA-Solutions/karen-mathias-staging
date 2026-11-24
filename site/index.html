@@ -339,9 +339,18 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px}
 @media (prefers-reduced-motion:reduce){.c1-zoom,.c1-zoom-strip{transition:none}}
 </style>
 <style id="mutti-polpa-css">
-/* Mutti · vídeo da Polpa no lugar da imagem (mesma caixa e mesmo efeito de hover do .zoom img) */
-.zoom video.mutti-polpa{display:block;width:100%;height:auto;transition:transform .5s}
-.zoom:hover video.mutti-polpa{transform:scale(1.04)}
+/* Mutti · vídeo da Polpa (mesmo visual dos .zoom). O toque abre o vídeo ampliado TOCANDO, como no Case 1 (não o #lb de imagem parada) */
+.polpa-btn{position:relative;display:block;border:0;padding:0;background:none;cursor:zoom-in;border-radius:8px;overflow:hidden}
+.polpa-btn::after{content:"⤢ ampliar";position:absolute;right:10px;bottom:10px;font:600 .72rem var(--ui);padding:4px 10px;border-radius:999px;background:rgba(7,4,13,.75);color:var(--white);opacity:0;transition:opacity .25s}
+.polpa-btn:hover::after{opacity:1}
+.polpa-btn video.mutti-polpa{display:block;width:100%;height:auto;transition:transform .5s}
+.polpa-btn:hover video.mutti-polpa{transform:scale(1.04)}
+.polpa-zoom{position:fixed;inset:0;z-index:91;background:rgba(5,2,10,.92);opacity:0;visibility:hidden;transition:opacity .25s,visibility .25s;display:grid;place-items:center;padding:calc(64px + env(safe-area-inset-top,0px)) 16px calc(52px + env(safe-area-inset-bottom,0px))}
+.polpa-zoom.on{opacity:1;visibility:visible}
+.polpa-zoom-vid{display:block;width:min(100%,520px,calc((100vh - 116px - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px)) * 720 / 1280));aspect-ratio:720/1280;height:auto;border-radius:10px;box-shadow:0 30px 80px rgba(0,0,0,.8);background:#000;object-fit:cover}
+@supports (height:100dvh){.polpa-zoom-vid{width:min(100%,520px,calc((100dvh - 116px - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px)) * 720 / 1280))}}
+.polpa-zoom-close{position:absolute;top:calc(16px + env(safe-area-inset-top,0px));right:16px;width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:rgba(255,255,255,.08);color:#fff;font-size:1.3rem;cursor:pointer}
+@media (prefers-reduced-motion:reduce){.polpa-zoom{transition:none}}
 </style>
 <style id="mutti-ref-css">
 /* Mutti · seções refeitas como nos prints de referência da Karen (Tipografia, Cores, Logo e Imagens, Instagram) */
@@ -711,7 +720,7 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px}
           <div class="dot" style="background:#b1232b"><i class="hex">#B1232B</i><b>Vermelho em Negrito</b><span>Destaca linhas e pequenos elementos gráficos</span></div>
           <div class="dot" style="background:#f86c51"><i class="hex">#F86C51</i><b>Vermelho Alegre</b><span>Enfatiza pacotes, ilustrações e animações. Usado em diversos formatos</span></div>
         </div>
-        <button class="zoom reveal mt-polpa" data-src="img/mutti_polpa_arte.webp" aria-label="Ampliar criativo Mutti Polpa"><video class="mutti-polpa" src="video/mutti_polpa.mp4" width="720" height="1280" poster="img/mutti_polpa_arte.webp" muted playsinline webkit-playsinline loop autoplay preload="none" aria-hidden="true"></video><img src="img/mutti_polpa_arte.webp" width="720" height="1280" loading="lazy" decoding="async" alt="Criativo Mutti Polpa, tomates finamente picados" hidden></button>
+        <button type="button" class="polpa-btn reveal mt-polpa" aria-label="Ampliar vídeo do criativo Mutti Polpa"><video class="mutti-polpa" src="video/mutti_polpa.mp4" width="720" height="1280" poster="img/mutti_polpa_arte.webp" muted playsinline webkit-playsinline loop autoplay preload="none" aria-hidden="true"></video><img src="img/mutti_polpa_arte.webp" width="720" height="1280" loading="lazy" decoding="async" alt="Criativo Mutti Polpa, tomates finamente picados" hidden></button>
       </div>
     </div>
   </section>
@@ -1569,12 +1578,42 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px}
 (function(){
   var v = document.querySelector('video.mutti-polpa'); if (!v) return;
   v.muted = true; v.playsInline = true;
-  if (matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)){ v.removeAttribute('autoplay'); v.autoplay = false; v.pause(); return; }
-  var on = false;
+  var on = false, auto = true, aberto = false, zEl = null, zv = null, btn = v.closest('.polpa-btn');
+  function play(el){ var p = el.play(); if (p && p.catch) p.catch(function(){}); }
   function sync(){
-    var zoomAberto = window.case1Zoom && window.case1Zoom.isOpen(); // um vídeo por vez: o zoom do Case 1 manda
-    if (on && !document.hidden && !zoomAberto){ var p = v.play(); if (p && p.catch) p.catch(function(){}); } else if (!v.paused) v.pause();
+    var zoomAberto = aberto || (window.case1Zoom && window.case1Zoom.isOpen()); // um vídeo por vez
+    if (auto && on && !document.hidden && !zoomAberto) play(v); else if (!v.paused) v.pause();
   }
+  // Zoom do vídeo (como o Case 1): abre ampliado TOCANDO a partir do mesmo segundo; ao fechar, a página segue de onde o zoom parou
+  function build(){
+    zEl = document.createElement('div'); zEl.className = 'polpa-zoom';
+    zEl.setAttribute('role', 'dialog'); zEl.setAttribute('aria-modal', 'true'); zEl.setAttribute('aria-label', 'Vídeo ampliado: Mutti Polpa');
+    zEl.innerHTML = '<button type="button" class="polpa-zoom-close" aria-label="Fechar">×</button><video class="polpa-zoom-vid" muted playsinline webkit-playsinline loop preload="auto"></video>';
+    document.body.appendChild(zEl);
+    zv = zEl.querySelector('video'); zv.muted = true; zv.playsInline = true; zv.poster = v.getAttribute('poster');
+    zv.src = v.currentSrc || v.getAttribute('src');
+    zEl.querySelector('.polpa-zoom-close').addEventListener('click', close);
+    zEl.addEventListener('click', function(e){ if (e.target !== zv) close(); });   // toque fora do vídeo fecha
+    addEventListener('keydown', function(e){ if (aberto && e.key === 'Escape') close(); });
+  }
+  function seek(el, t){ if (el.readyState >= 1){ try { el.currentTime = t; } catch(e){} } else el.addEventListener('loadedmetadata', function f(){ el.removeEventListener('loadedmetadata', f); try { el.currentTime = t; } catch(e){} }); }
+  function open(){
+    if (!zEl) build();
+    aberto = true; var t = v.currentTime || 0; v.pause();
+    seek(zv, t); play(zv);                                         // play() dentro do toque: o iPhone permite
+    document.documentElement.style.overflow = 'hidden';
+    void zEl.offsetWidth; zEl.classList.add('on');
+    zEl.querySelector('.polpa-zoom-close').focus({preventScroll: true});
+  }
+  function close(){
+    if (!aberto) return; aberto = false;
+    zEl.classList.remove('on'); document.documentElement.style.overflow = '';
+    var t = zv.currentTime; zv.pause(); seek(v, t); sync();
+    if (btn) btn.focus({preventScroll: true});
+  }
+  if (btn) btn.addEventListener('click', open);
+  window.polpaZoom = {open: open, close: close, isOpen: function(){ return aberto; }};
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)){ v.removeAttribute('autoplay'); v.autoplay = false; v.pause(); auto = false; return; }
   new IntersectionObserver(function(es){ on = es[0].isIntersecting; sync(); }, {threshold: .25}).observe(v);
   document.addEventListener('visibilitychange', sync);
 })();
