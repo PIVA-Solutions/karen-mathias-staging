@@ -364,12 +364,11 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px}
 .cert{align-items:start}
 .cert-left{display:grid;gap:20px;align-content:start;max-width:380px}
 .cert-left .cert-photo{max-width:none}
-/* computador: coluna da direita com a mesma altura da esquerda; título centralizado no topo, certificados terminam junto com o texto */
-@media (min-width:821px){
-  .cert{align-items:stretch}
-  .cert-copy{display:flex;flex-direction:column;justify-content:space-between}
-  .cert-copy h2{text-align:center}
-}
+/* coluna da direita com a mesma altura da esquerda; título centralizado no topo, certificados terminam junto com o texto */
+.cert{align-items:stretch}
+.cert-copy{display:flex;flex-direction:column;justify-content:space-between}
+.cert-copy h2{text-align:center}
+@media (max-width:820px){.cert .cert-grid{grid-template-columns:minmax(0,1fr);gap:8px}}
 @media (max-width:820px){
   .cert-left{gap:12px;max-width:none}
   .cert-left .lead{font-size:.8rem;line-height:1.5}
@@ -378,7 +377,7 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px}
   #sobre .sobre-corpo .note{grid-column:1;grid-row:1;padding:18px 13px 15px}
   #sobre .sobre-corpo .note p{font-size:.74rem;line-height:1.5}
   #sobre .sobre-corpo .note p+p{margin-top:7px}
-  .cert{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px;align-items:start}
+  .cert{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px;align-items:stretch}
   .cert-photo{width:auto;margin-inline:0;border-radius:14px}
   .cert-copy{gap:12px}
   .cert-copy h2{font-size:clamp(1.2rem,6vw,2.4rem);white-space:nowrap;position:relative;z-index:1}
